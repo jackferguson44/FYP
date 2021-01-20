@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import uk.ac.tees.t7099806.mediatracker2.LoginActivity;
 import uk.ac.tees.t7099806.mediatracker2.R;
 
@@ -26,6 +28,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         return new SettingsFragment();
     }
 
+    private FirebaseAuth firebaseAuth;
     private Button buttonLogOut;
 
     @Override
@@ -35,6 +38,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         buttonLogOut = view.findViewById(R.id.logoutButton);
         buttonLogOut.setOnClickListener(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         return view;
     }
@@ -50,6 +54,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v == buttonLogOut)
         {
+            firebaseAuth.signOut();
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
 

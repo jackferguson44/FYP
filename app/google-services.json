@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "570844079237",
+    "project_id": "mediatracker-ae22d",
+    "storage_bucket": "mediatracker-ae22d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570844079237:android:693e9e9deaf5f09b63b5ec",
+        "android_client_info": {
+          "package_name": "uk.ac.tees.t7099806.mediatracker2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570844079237-h3h6qnq6o8adop1a3agqk8fvajlf3931.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uk.ac.tees.t7099806.mediatracker2",
+            "certificate_hash": "2c1265c2441b290694784179916bbd8eaf051da3"
+          }
+        },
+        {
+          "client_id": "570844079237-shrnjkll2k26n150g1djjqrij1q383ch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABfa0fQrTqTHy3WMiqd0MrF0m95bsSXDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570844079237-shrnjkll2k26n150g1djjqrij1q383ch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
