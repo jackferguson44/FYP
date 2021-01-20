@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_profile">
+
+
+
+    <fragment
+        android:id="@+id/navigation_discover"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.Discover.DiscoverFragment"
+        android:label="Discover"
+        tools:layout="@layout/fragment_discover" />
+
+    <fragment
+        android:id="@+id/navigation_lists"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.Lists.ListsFragment"
+        android:label="Lists"
+        tools:layout="@layout/fragment_lists" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.Profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.Search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_shared_lists"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.SharedLists.SharedListsFragment"
+        android:label="Shared Lists"
+        tools:layout="@layout/fragment_shared_lists" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="uk.ac.tees.t7099806.mediatracker2.ui.Settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment" />
+</navigation>
