@@ -110,8 +110,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 {
                     finish();
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    user.sendEmailVerification();
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                   // user.sendEmailVerification();
+                    startActivity(new Intent(RegisterActivity.this, EditProfileActivity.class));
                 }
                 else
                 {
@@ -122,6 +122,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         });
 
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        //startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
     }
 }
