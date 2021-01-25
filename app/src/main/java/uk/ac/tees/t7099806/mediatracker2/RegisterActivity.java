@@ -37,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseReference databaseReference;
     private String userId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

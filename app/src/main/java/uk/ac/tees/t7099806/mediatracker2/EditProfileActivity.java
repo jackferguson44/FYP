@@ -35,6 +35,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private FirebaseUser user;
     private String userId;
 
+//    //private Date date;
+//    private int booksRead;
+//    private double bookScore;
+//    private int showsWatched;
+//    //private Time timeWatched;
+//    private double showScore;
+//    private double totalScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +104,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         UserInformation userInformation = new UserInformation(userName, phone);
 
 
-        databaseReference.child("users").child(user.getUid()).push().setValue(userInformation);
+        databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+
         Toast.makeText(this, "Details Saved", Toast.LENGTH_SHORT).show();
     }
 
@@ -115,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         if(v == buttonSave)
         {
             saveInformation();
-            //startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
 
     }

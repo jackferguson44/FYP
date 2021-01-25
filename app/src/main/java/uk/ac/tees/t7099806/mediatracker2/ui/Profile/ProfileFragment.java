@@ -21,6 +21,8 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
     private ProfileViewModel profileViewModel;
 
+    private TextView user_name, user_info, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText;
+
     private Button buttonEditProfile;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
