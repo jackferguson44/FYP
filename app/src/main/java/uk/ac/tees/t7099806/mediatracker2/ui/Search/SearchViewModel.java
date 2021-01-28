@@ -9,11 +9,11 @@ public class SearchViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
     public SearchViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is the Search fragment");
+//        mText = new MutableLiveData<>();
+//        mText.setValue("This is the Search fragment");
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+//    public LiveData<String> getText() {
+//        return mText;
+//    }
 }
