@@ -44,12 +44,12 @@
             />
 
         <TextView
-            android:id="@+id/user_info"
+            android:id="@+id/user_join_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:layout_centerHorizontal="true"
-            android:text="Information"
+            android:text="Join Date"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             />

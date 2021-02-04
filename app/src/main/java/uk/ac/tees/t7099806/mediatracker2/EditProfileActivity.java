@@ -23,6 +23,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
     public DatabaseReference databaseReference;
@@ -34,6 +38,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
     private String userId;
+
+    private boolean accountExists;
+    private String joinDate;
 
 //    //private Date date;
 //    private int booksRead;
@@ -100,14 +107,22 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     {
         String userName = editTextUsername.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
+        String pattern = "dd-MM-yyyy";
+        String date = new SimpleDateFormat(pattern).format(new Date());
 
-        UserInformation userInformation = new UserInformation(userName, phone);
-
-
-        databaseReference.child("users").child(user.getUid()).setValue(userInformation);
-
+        if(accountExists == false)
+        {
+            UserInformation userInformation = new UserInformation(userName, phone, date);
+            databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+        }
+        else
+        {
+            UserInformation userInformation = new UserInformation(userName, phone, joinDate);
+            databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+        }
         Toast.makeText(this, "Details Saved", Toast.LENGTH_SHORT).show();
     }
+
 
     private void showData(DataSnapshot dataSnapshot)
     {
@@ -115,6 +130,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         {
             editTextUsername.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
             editTextPhone.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getPhone());
+            joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
+            accountExists = true;
+        }
+        else
+        {
+            accountExists = false;
         }
     }
 

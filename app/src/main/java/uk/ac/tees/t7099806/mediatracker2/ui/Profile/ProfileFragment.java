@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
     private ProfileViewModel profileViewModel;
 
-    private TextView user_name, user_info, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText;
+    private TextView user_name, user_join_date, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText;
     private Button buttonEditProfile;
 
     private FirebaseDatabase firebaseDatabase;
@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         }
 
         user_name = view.findViewById(R.id.user_name);
-        user_info = view.findViewById(R.id.user_info);
+        user_join_date = view.findViewById(R.id.user_join_date);
         booksReadText = view.findViewById(R.id.booksReadText);
         booksScoreText = view.findViewById(R.id.booksScoreText);
         showsWatchedText = view.findViewById(R.id.showsWatchedText);
@@ -133,6 +133,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
     {
        // user_name.setText("jack ferg");
         user_name.setText(dataSnapshot.child(userId).getValue(UserInformation.class).getUserName());
+        user_join_date.setText("Date Joined: " + dataSnapshot.child(userId).getValue(UserInformation.class).getDate());
         booksReadText.setText(dataSnapshot.child(userId).child("booksRead").getValue().toString());
         booksScoreText.setText(dataSnapshot.child(userId).child("bookScore").getValue().toString());
         showsWatchedText.setText(dataSnapshot.child(userId).child("showsWatched").getValue().toString());

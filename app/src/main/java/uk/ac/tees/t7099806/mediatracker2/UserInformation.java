@@ -7,7 +7,7 @@ public class UserInformation {
 
     public String userName;
     public String phone;
-    public Date date;
+    public String date;
     public int booksRead;
     public double bookScore;
     public int showsWatched;
@@ -21,10 +21,11 @@ public class UserInformation {
 
     }
 
-    public UserInformation(String userName, String phone)
+    public UserInformation(String userName, String phone, String date)
     {
         this.userName = userName;
         this.phone = phone;
+        this.date = date;
     }
 
     public String getUserName() {
@@ -83,6 +84,7 @@ public class UserInformation {
         this.totalScore = totalScore;
     }
 
+    public String getDate() { return date; }
 
-
+    public void setDate(String date) { this.date = date; }
 }
