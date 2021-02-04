@@ -17,10 +17,6 @@
             android:label="@string/title_activity_book_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".BooksActivity"
-            android:label="@string/title_activity_books"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".SearchBooksActivity"
             android:label="@string/title_activity_search_books"
             android:theme="@style/AppTheme.NoActionBar" />

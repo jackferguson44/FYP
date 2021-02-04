@@ -16,9 +16,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--Image view for displaying our book image-->
             <ImageView
-                android:id="@+id/idIVbook"
+                android:id="@+id/IVbook"
                 android:layout_width="130dp"
                 android:layout_height="160dp"
                 android:layout_margin="18dp" />
@@ -31,7 +30,7 @@
 
                 <!--Text view for displaying book publisher-->
                 <TextView
-                    android:id="@+id/idTVpublisher"
+                    android:id="@+id/TVpublisher"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
@@ -41,7 +40,7 @@
 
                 <!--text view for displaying number of pages of book-->
                 <TextView
-                    android:id="@+id/idTVNoOfPages"
+                    android:id="@+id/TVNoOfPages"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -52,7 +51,7 @@
 
                 <!--text view for displaying book publish date-->
                 <TextView
-                    android:id="@+id/idTVPublishDate"
+                    android:id="@+id/TVPublishDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -65,9 +64,9 @@
 
         </LinearLayout>
 
-        <!--text view for displaying book title-->
+
         <TextView
-            android:id="@+id/idTVTitle"
+            android:id="@+id/TVTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -76,9 +75,9 @@
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
-        <!--text view for displaying book subtitle-->
+
         <TextView
-            android:id="@+id/idTVSubTitle"
+            android:id="@+id/TVSubTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -87,9 +86,9 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp" />
 
-        <!--text view for displaying book description-->
+
         <TextView
-            android:id="@+id/idTVDescription"
+            android:id="@+id/TVDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

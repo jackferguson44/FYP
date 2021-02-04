@@ -30,13 +30,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchBooksActivity extends AppCompatActivity{
+public class SearchBooksActivity extends AppCompatActivity implements  View.OnClickListener{
 
-    // creating variables for our request queue,
-    // array list, progressbar, edittext,
-    // image button and our recycler view.
-    private RequestQueue mRequestQueue;
-    private ArrayList<BookInformation> bookInfoArrayList;
+
+    private RequestQueue requestQueue;
+    private ArrayList<BookInformation> bookInformationArrayList;
     private EditText searchEdt;
     private Button searchBtn;
 
@@ -45,54 +43,35 @@ public class SearchBooksActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_books);
 
-        // initializing our views.
-        searchEdt = findViewById(R.id.idEdtSearchBooks);
+        searchEdt = findViewById(R.id.editSearchBooks);
         searchBtn = findViewById(R.id.searchBooksButton);
+
+        searchBtn.setOnClickListener(this);
 
         // initializing on click listener for our button.
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // checking if our edittext field is empty or not.
-                if (searchEdt.getText().toString().isEmpty()) {
-                    searchEdt.setError("Please enter search query");
-                    return;
-                }
-                // if the search query is not empty then we are
-                // calling get book info method to load all
-                // the books from the API.
-                getBooksInfo(searchEdt.getText().toString());
+
             }
         });
     }
 
-    private void getBooksInfo(String query) {
+    private void getBooksInformation(String query) {
 
-        // creating a new array list.
-        bookInfoArrayList = new ArrayList<>();
+        bookInformationArrayList = new ArrayList<>();
 
-        // below line is use to initialize
-        // the variable for our request queue.
-        mRequestQueue = Volley.newRequestQueue(SearchBooksActivity.this);
 
-        // below line is use to clear cache this
-        // will be use when our data is being updated.
-        mRequestQueue.getCache().clear();
+        requestQueue = Volley.newRequestQueue(SearchBooksActivity.this);
+        requestQueue.getCache().clear();
 
-        // below is the url for getting data from API in json format.
         String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
-
-        // below line we are  creating a new request queue.
         RequestQueue queue = Volley.newRequestQueue(SearchBooksActivity.this);
 
-
-        // below line is use to make json object request inside that we
-        // are passing url, get method and getting json object. .
         JsonObjectRequest booksObjrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // inside on response method we are extracting all our json data.
                 try {
                     JSONArray itemsArray = response.getJSONArray("items");
                     for (int i = 0; i < itemsArray.length(); i++) {
@@ -117,32 +96,23 @@ public class SearchBooksActivity extends AppCompatActivity{
                                 authorsArrayList.add(authorsArray.optString(i));
                             }
                         }
-                        // after extracting all the data we are
-                        // saving this data in our modal class.
-                        BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
 
-                        // below line is use to pass our modal
-                        // class in our array list.
-                        bookInfoArrayList.add(bookInfo);
+                        BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnail, previewLink);
 
-                        // below line is use to pass our
-                        // array list in adapter class.
-                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, SearchBooksActivity.this);
+                        bookInformationArrayList.add(bookInfo);
 
-                        // below line is use to add linear layout
-                        // manager for our recycler view.
+                        BookAdapter adapter = new BookAdapter(bookInformationArrayList, SearchBooksActivity.this);
+
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchBooksActivity.this, RecyclerView.VERTICAL, false);
                         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.bookList);
 
-                        // in below line we are setting layout manager and
-                        // adapter to our recycler view.
                         mRecyclerView.setLayoutManager(linearLayoutManager);
                         mRecyclerView.setAdapter(adapter);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // displaying a toast message when we get any error from API
-                    Toast.makeText(SearchBooksActivity.this, "No Data Found" + e, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchBooksActivity.this, "No Books Found" + e, Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -155,5 +125,18 @@ public class SearchBooksActivity extends AppCompatActivity{
         // at last we are adding our json object
         // request in our request queue.
         queue.add(booksObjrequest);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == searchBtn)
+        {
+            if (searchEdt.getText().toString().isEmpty())
+            {
+                searchEdt.setError("Please enter something");
+                return;
+            }
+            getBooksInformation(searchEdt.getText().toString());
+        }
     }
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class BookInformation {
 
-    // creating string, int and array list
-    // variables for our book details
     private String title;
     private String subtitle;
     private ArrayList<String> authors;
@@ -15,10 +13,21 @@ public class BookInformation {
     private int pageCount;
     private String thumbnail;
     private String previewLink;
-    private String infoLink;
-    private String buyLink;
 
-    // creating getter and setter methods
+    public BookInformation(String title, String subtitle, ArrayList<String> authors, String publisher,
+                           String publishedDate, String description, int pageCount, String thumbnail,
+                           String previewLink) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.authors = authors;
+        this.publisher = publisher;
+        this.publishedDate = publishedDate;
+        this.description = description;
+        this.pageCount = pageCount;
+        this.thumbnail = thumbnail;
+        this.previewLink = previewLink;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -91,38 +100,8 @@ public class BookInformation {
         this.previewLink = previewLink;
     }
 
-    public String getInfoLink() {
-        return infoLink;
-    }
 
-    public void setInfoLink(String infoLink) {
-        this.infoLink = infoLink;
-    }
 
-    public String getBuyLink() {
-        return buyLink;
-    }
-
-    public void setBuyLink(String buyLink) {
-        this.buyLink = buyLink;
-    }
-
-    // creating a constructor class for our BookInfo
-    public BookInformation(String title, String subtitle, ArrayList<String> authors, String publisher,
-                    String publishedDate, String description, int pageCount, String thumbnail,
-                    String previewLink, String infoLink, String buyLink) {
-        this.title = title;
-        this.subtitle = subtitle;
-        this.authors = authors;
-        this.publisher = publisher;
-        this.publishedDate = publishedDate;
-        this.description = description;
-        this.pageCount = pageCount;
-        this.thumbnail = thumbnail;
-        this.previewLink = previewLink;
-        this.infoLink = infoLink;
-        this.buyLink = buyLink;
-    }
 
 
 }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class BookDetailsActivity extends AppCompatActivity implements  View.OnClickListener{
 
-    // creating variables for strings,text view, image views and button.
+
     String title, subtitle, publisher, publishedDate, description, thumbnail, previewLink;
     int pageCount;
     private ArrayList<String> authors;
@@ -35,19 +35,17 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
-        // initializing our views..
-        titleTV = findViewById(R.id.idTVTitle);
-        subtitleTV = findViewById(R.id.idTVSubTitle);
-        publisherTV = findViewById(R.id.idTVpublisher);
-        descTV = findViewById(R.id.idTVDescription);
-        pageTV = findViewById(R.id.idTVNoOfPages);
-        publishDateTV = findViewById(R.id.idTVPublishDate);
-        bookIV = findViewById(R.id.idIVbook);
+        titleTV = findViewById(R.id.TVTitle);
+        subtitleTV = findViewById(R.id.TVSubTitle);
+        publisherTV = findViewById(R.id.TVpublisher);
+        descTV = findViewById(R.id.TVDescription);
+        pageTV = findViewById(R.id.TVNoOfPages);
+        publishDateTV = findViewById(R.id.TVPublishDate);
+        bookIV = findViewById(R.id.IVbook);
 
         buttonAddToList = findViewById(R.id.buttonAddToList);
         buttonAddToList.setOnClickListener(this);
 
-        // getting the data which we have passed from our adapter class.
         title = getIntent().getStringExtra("title");
         subtitle = getIntent().getStringExtra("subtitle");
         publisher = getIntent().getStringExtra("publisher");
@@ -57,8 +55,6 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
         thumbnail = getIntent().getStringExtra("thumbnail");
         previewLink = getIntent().getStringExtra("previewLink");
 
-        // after getting the data we are setting
-        // that data to our text views and image view.
         titleTV.setText(title);
         subtitleTV.setText(subtitle);
         publisherTV.setText(publisher);

@@ -38,7 +38,7 @@
             android:layout_below="@+id/imgUser"
             android:layout_centerHorizontal="true"
             android:textSize="30sp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/white"
             android:text="User Name"
             android:layout_marginTop="10sp"
             />
@@ -50,7 +50,7 @@
             android:layout_below="@+id/user_name"
             android:layout_centerHorizontal="true"
             android:text="Join Date"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/white"
             android:textSize="20sp"
             />
 
@@ -259,7 +259,7 @@
             android:fontFamily="sans-serif-light"
             android:text="Edit Profile"
             android:background="@color/colorPrimary"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </RelativeLayout>
 
