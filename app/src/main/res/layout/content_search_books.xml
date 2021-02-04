@@ -8,11 +8,10 @@
 
 
     <LinearLayout
-        android:id="@+id/idLLsearch"
+        android:id="@+id/linearLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="5">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView5"
@@ -52,20 +51,12 @@
 
     </LinearLayout>
 
-    <!--recycler view for displaying our list of books-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/idRVBooks"
+        android:id="@+id/bookList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/idLLsearch" />
+        android:layout_below="@id/linearLay" />
 
-    <!--progressbar for displaying our loading indicator-->
-    <ProgressBar
-        android:id="@+id/idLoadingPB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
 
 

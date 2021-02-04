@@ -37,7 +37,6 @@ public class SearchBooksActivity extends AppCompatActivity{
     // image button and our recycler view.
     private RequestQueue mRequestQueue;
     private ArrayList<BookInformation> bookInfoArrayList;
-    private ProgressBar progressBar;
     private EditText searchEdt;
     private Button searchBtn;
 
@@ -47,7 +46,6 @@ public class SearchBooksActivity extends AppCompatActivity{
         setContentView(R.layout.activity_search_books);
 
         // initializing our views.
-        progressBar = findViewById(R.id.idLoadingPB);
         searchEdt = findViewById(R.id.idEdtSearchBooks);
         searchBtn = findViewById(R.id.searchBooksButton);
 
@@ -55,7 +53,6 @@ public class SearchBooksActivity extends AppCompatActivity{
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
 
                 // checking if our edittext field is empty or not.
                 if (searchEdt.getText().toString().isEmpty()) {
@@ -95,7 +92,6 @@ public class SearchBooksActivity extends AppCompatActivity{
         JsonObjectRequest booksObjrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                progressBar.setVisibility(View.GONE);
                 // inside on response method we are extracting all our json data.
                 try {
                     JSONArray itemsArray = response.getJSONArray("items");
@@ -136,7 +132,7 @@ public class SearchBooksActivity extends AppCompatActivity{
                         // below line is use to add linear layout
                         // manager for our recycler view.
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchBooksActivity.this, RecyclerView.VERTICAL, false);
-                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.idRVBooks);
+                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.bookList);
 
                         // in below line we are setting layout manager and
                         // adapter to our recycler view.
