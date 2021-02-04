@@ -105,25 +105,14 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <!--button for displaying book preview-->
             <Button
-                android:id="@+id/idBtnPreview"
-                android:layout_width="0dp"
+                android:id="@+id/buttonAddToList"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Preview"
-                android:textAllCaps="false" />
-
-            <!--button for opening buying page of the book-->
-            <Button
-                android:id="@+id/idBtnBuy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:text="Buy"
-                android:textAllCaps="false" />
+                android:text="Add To List"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </LinearLayout>

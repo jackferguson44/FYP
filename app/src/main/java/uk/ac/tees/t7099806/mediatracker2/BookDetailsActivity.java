@@ -19,16 +19,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class BookDetailsActivity extends AppCompatActivity {
+public class BookDetailsActivity extends AppCompatActivity implements  View.OnClickListener{
 
     // creating variables for strings,text view, image views and button.
-    String title, subtitle, publisher, publishedDate, description, thumbnail, previewLink, infoLink, buyLink;
+    String title, subtitle, publisher, publishedDate, description, thumbnail, previewLink;
     int pageCount;
     private ArrayList<String> authors;
 
     TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
-    Button previewBtn, buyBtn;
     private ImageView bookIV;
+    Button buttonAddToList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,10 @@ public class BookDetailsActivity extends AppCompatActivity {
         descTV = findViewById(R.id.idTVDescription);
         pageTV = findViewById(R.id.idTVNoOfPages);
         publishDateTV = findViewById(R.id.idTVPublishDate);
-        previewBtn = findViewById(R.id.idBtnPreview);
-        buyBtn = findViewById(R.id.idBtnBuy);
         bookIV = findViewById(R.id.idIVbook);
+
+        buttonAddToList = findViewById(R.id.buttonAddToList);
+        buttonAddToList.setOnClickListener(this);
 
         // getting the data which we have passed from our adapter class.
         title = getIntent().getStringExtra("title");
@@ -55,8 +56,6 @@ public class BookDetailsActivity extends AppCompatActivity {
         pageCount = getIntent().getIntExtra("pageCount", 0);
         thumbnail = getIntent().getStringExtra("thumbnail");
         previewLink = getIntent().getStringExtra("previewLink");
-        infoLink = getIntent().getStringExtra("infoLink");
-        buyLink = getIntent().getStringExtra("buyLink");
 
         // after getting the data we are setting
         // that data to our text views and image view.
@@ -68,38 +67,13 @@ public class BookDetailsActivity extends AppCompatActivity {
         pageTV.setText("No Of Pages : " + pageCount);
         Picasso.get().load(thumbnail).into(bookIV);
 
-        // adding on click listener for our preview button.
-        previewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (previewLink.isEmpty()) {
-                    // below toast message is displayed when preview link is not present.
-                    Toast.makeText(BookDetailsActivity.this, "No preview Link present", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // if the link is present we are opening
-                // that link via an intent.
-                Uri uri = Uri.parse(previewLink);
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(i);
-            }
-        });
+    }
 
-        // initializing on click listener for buy button.
-        buyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (buyLink.isEmpty()) {
-                    // below toast message is displaying when buy link is empty.
-                    Toast.makeText(BookDetailsActivity.this, "No buy page present for this book", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // if the link is present we are opening
-                // the link via an intent.
-                Uri uri = Uri.parse(buyLink);
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(i);
-            }
-        });
+    @Override
+    public void onClick(View v) {
+        if(v == buttonAddToList)
+        {
+
+        }
     }
 }
