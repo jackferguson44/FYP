@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +38,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
     private ProfileViewModel profileViewModel;
 
-    private TextView user_name, user_join_date, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText;
+    private TextView user_name, user_join_date, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText, navUserName;
     private Button buttonEditProfile;
 
     private FirebaseDatabase firebaseDatabase;
@@ -104,6 +105,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
         buttonEditProfile = view.findViewById(R.id.buttonEditProfile);
         buttonEditProfile.setOnClickListener(this);
+
         return view;
     }
 

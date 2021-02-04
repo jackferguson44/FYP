@@ -14,9 +14,10 @@
         android:src="@drawable/ic_profile_picture"/>
 
     <TextView
+        android:id="@+id/nav_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="User Name"
         android:textColor="@color/cardview_light_background"
-        android:textSize="30sp"/>
+        android:textSize="15sp"/>
 </LinearLayout>
