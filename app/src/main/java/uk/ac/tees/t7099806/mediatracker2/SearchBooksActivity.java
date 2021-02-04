@@ -39,7 +39,7 @@ public class SearchBooksActivity extends AppCompatActivity{
     private ArrayList<BookInformation> bookInfoArrayList;
     private ProgressBar progressBar;
     private EditText searchEdt;
-    private ImageButton searchBtn;
+    private Button searchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class SearchBooksActivity extends AppCompatActivity{
         // initializing our views.
         progressBar = findViewById(R.id.idLoadingPB);
         searchEdt = findViewById(R.id.idEdtSearchBooks);
-        searchBtn = findViewById(R.id.idBtnSearch);
+        searchBtn = findViewById(R.id.searchBooksButton);
 
         // initializing on click listener for our button.
         searchBtn.setOnClickListener(new View.OnClickListener() {
