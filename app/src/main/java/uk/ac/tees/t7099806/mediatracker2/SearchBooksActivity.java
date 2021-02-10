@@ -78,7 +78,7 @@ public class SearchBooksActivity extends AppCompatActivity{
         requestQueue.getCache().clear();
 
         // below is the url for getting data from API in json format.
-        String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+        final String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
 
         // below line we are  creating a new request queue.
         RequestQueue queue = Volley.newRequestQueue(SearchBooksActivity.this);
@@ -124,7 +124,7 @@ public class SearchBooksActivity extends AppCompatActivity{
 
                         // below line is use to pass our
                         // array list in adapter class.
-                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, SearchBooksActivity.this);
+                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, SearchBooksActivity.this, url);
 
                         // below line is use to add linear layout
                         // manager for our recycler view.

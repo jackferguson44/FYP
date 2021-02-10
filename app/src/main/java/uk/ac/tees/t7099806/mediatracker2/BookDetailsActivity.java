@@ -61,7 +61,12 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
         publishDateTV.setText("Published On : " + publishedDate);
         descTV.setText(description);
         pageTV.setText("No Of Pages : " + pageCount);
-        Picasso.get().load(thumbnail).into(bookIV);
+
+
+        
+
+        Picasso.get().load("http://books.google.com/books/content?id=xYmNDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api").into(bookIV);
+        //Picasso.get().load(thumbnail).into(bookIV);
 
     }
 

@@ -62,10 +62,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pageCount"
-                android:layout_alignParentEnd="true"
+                android:layout_marginTop="3dp"
+                android:layout_toEndOf="@+id/bookImage"
                 android:layout_marginEnd="5dp"
                 android:padding="3dp"
-                android:text="date"
+                android:text="Date"
                 android:textColor="@color/colorPrimary"
                 android:textSize="11sp" />
 

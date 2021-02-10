@@ -22,11 +22,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     private ArrayList<BookInformation> bookInfoArrayList;
     private Context mcontext;
+    private String url;
 
-
-    public BookAdapter(ArrayList<BookInformation> bookInfoArrayList, Context mcontext) {
+    public BookAdapter(ArrayList<BookInformation> bookInfoArrayList, Context mcontext, String url) {
         this.bookInfoArrayList = bookInfoArrayList;
         this.mcontext = mcontext;
+        this.url = url;
     }
 
     @NonNull
@@ -45,7 +46,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.pageCountTV.setText("No of Pages : " + bookInfo.getPageCount());
         holder.dateTV.setText(bookInfo.getPublishedDate());
 
-        Picasso.get().load(bookInfo.getThumbnail()).into(holder.bookIV);
+        Picasso.get().load("https://books.google.com/books?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api").into(holder.bookIV);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
