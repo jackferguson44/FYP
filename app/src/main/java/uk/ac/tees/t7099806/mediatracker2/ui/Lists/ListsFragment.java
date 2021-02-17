@@ -1,9 +1,11 @@
 package uk.ac.tees.t7099806.mediatracker2.ui.Lists;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,12 +15,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import uk.ac.tees.t7099806.mediatracker2.R;
+import uk.ac.tees.t7099806.mediatracker2.ReadListActivity;
 
-public class ListsFragment extends Fragment {
+public class ListsFragment extends Fragment implements View.OnClickListener {
 
     private ListsViewModel listsViewModel;
 
-
+    Button readButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -26,11 +29,17 @@ public class ListsFragment extends Fragment {
         listsViewModel = ViewModelProviders.of(this).get(ListsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_lists, container, false);
 
-
-
+        readButton = root.findViewById(R.id.readButton);
+        readButton.setOnClickListener(this);
         return root;
     }
 
-   
 
+    @Override
+    public void onClick(View v) {
+        if(v == readButton)
+        {
+            startActivity(new Intent(getActivity(), ReadListActivity.class));
+        }
+    }
 }
