@@ -99,9 +99,4 @@ public class BookInformation {
     public void setPreviewLink(String previewLink) {
         this.previewLink = previewLink;
     }
-
-
-
-
-
 }

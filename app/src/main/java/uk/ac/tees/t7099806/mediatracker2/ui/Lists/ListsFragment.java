@@ -25,13 +25,9 @@ public class ListsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         listsViewModel = ViewModelProviders.of(this).get(ListsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_lists, container, false);
-        final TextView textView = root.findViewById(R.id.text_lists);
-        listsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+
+
         return root;
     }
 

@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +25,21 @@ import java.util.ArrayList;
 
 public class BookDetailsActivity extends AppCompatActivity implements  View.OnClickListener{
 
+    public DatabaseReference databaseReference;
 
-    String title, subtitle, publisher, publishedDate, description, thumbnail, previewLink;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private String userId;
+
+
+
+    private String title, subtitle, publisher, publishedDate, description, thumbnail;
     int pageCount;
     private ArrayList<String> authors;
 
     TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
     private ImageView bookIV;
-    Button buttonAddToList;
+    private Button buttonAddToList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +64,6 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
         description = getIntent().getStringExtra("description");
         pageCount = getIntent().getIntExtra("pageCount", 0);
         thumbnail = getIntent().getStringExtra("thumbnail");
-        previewLink = getIntent().getStringExtra("previewLink");
 
         titleTV.setText(title);
         subtitleTV.setText(subtitle);
@@ -62,11 +72,12 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
         descTV.setText(description);
         pageTV.setText("No Of Pages : " + pageCount);
 
+        Picasso.get().load(thumbnail).into(bookIV);
 
-        
-
-        Picasso.get().load("http://books.google.com/books/content?id=xYmNDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api").into(bookIV);
-        //Picasso.get().load(thumbnail).into(bookIV);
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        userId = firebaseUser.getUid();
 
     }
 
@@ -74,7 +85,18 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
     public void onClick(View v) {
         if(v == buttonAddToList)
         {
-
+            saveToList();
         }
     }
+
+    private void saveToList()
+    {
+        String pages = String.valueOf(pageCount);
+
+        BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
+        databaseReference.child("lists").child(firebaseUser.getUid()).child("read list").push().setValue(bookInfoFirebase);
+        Toast.makeText(this, "Added to read list", Toast.LENGTH_SHORT).show();
+    }
+
+
 }
