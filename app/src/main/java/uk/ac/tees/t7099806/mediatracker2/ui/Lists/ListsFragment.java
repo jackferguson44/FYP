@@ -16,12 +16,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import uk.ac.tees.t7099806.mediatracker2.R;
 import uk.ac.tees.t7099806.mediatracker2.ReadListActivity;
+import uk.ac.tees.t7099806.mediatracker2.ReadingListActivity;
 
 public class ListsFragment extends Fragment implements View.OnClickListener {
 
     private ListsViewModel listsViewModel;
 
-    Button readButton;
+    Button readButton, readingButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -31,6 +32,9 @@ public class ListsFragment extends Fragment implements View.OnClickListener {
 
         readButton = root.findViewById(R.id.readButton);
         readButton.setOnClickListener(this);
+        readingButton = root.findViewById(R.id.readingButton);
+        readingButton.setOnClickListener(this);
+
         return root;
     }
 
@@ -40,6 +44,10 @@ public class ListsFragment extends Fragment implements View.OnClickListener {
         if(v == readButton)
         {
             startActivity(new Intent(getActivity(), ReadListActivity.class));
+        }
+        if(v == readingButton)
+        {
+            startActivity(new Intent(getActivity(), ReadingListActivity.class));
         }
     }
 }
