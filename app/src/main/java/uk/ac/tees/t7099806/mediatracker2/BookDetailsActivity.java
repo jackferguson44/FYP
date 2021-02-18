@@ -8,24 +8,32 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class BookDetailsActivity extends AppCompatActivity implements  View.OnClickListener{
+public class BookDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
-    public DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -34,15 +42,18 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
 
 
     private String title, subtitle, publisher, publishedDate, description, thumbnail;
-    int pageCount;
+    private int pageCount;
     private ArrayList<String> authors;
 
-    TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
+    private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
     private ImageView bookIV;
     private Button buttonAddToList;
+    private Spinner spinner;
+    private String spinValue;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
@@ -56,6 +67,14 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
 
         buttonAddToList = findViewById(R.id.buttonAddToList);
         buttonAddToList.setOnClickListener(this);
+
+
+        spinner = (Spinner) findViewById(R.id.spinnerAddToList);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(BookDetailsActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.spinner_list));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(myAdapter);
+        spinner.setOnItemSelectedListener(this);
+
 
         title = getIntent().getStringExtra("title");
         subtitle = getIntent().getStringExtra("subtitle");
@@ -81,22 +100,88 @@ public class BookDetailsActivity extends AppCompatActivity implements  View.OnCl
 
     }
 
+
+
+
+
+
     @Override
-    public void onClick(View v) {
-        if(v == buttonAddToList)
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getItemAtPosition(position).equals("Plan To Read"))
         {
-            saveToList();
+           spinValue = "plantoreadlist";
+        }
+        else if(parent.getItemAtPosition(position).equals("Read"))
+        {
+            spinValue = "read list";
+        }
+        else
+        {
+            spinValue = "reading list";
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v == buttonAddToList)
+        {
+            saveToList(spinValue);
+//            if(spinValue == "Read")
+//            {
+//                saveToReadList();
+//            }
+//            else if(spinValue == "Plan To Read")
+//            {
+//                saveToPlanToReadList();
+//            }
+//            else if(spinValue == "Reading")
+//            {
+//                saveToReadingList();
+//            }
         }
     }
 
-    private void saveToList()
+    private void saveToReadList()
     {
-        String pages = String.valueOf(pageCount);
 
-        BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
-        databaseReference.child("lists").child(firebaseUser.getUid()).child("read list").push().setValue(bookInfoFirebase);
-        Toast.makeText(this, "Added to read list", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Added to read list", Toast.LENGTH_SHORT).show();
+
+//        ValueEventListener valueEventListener  = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                showData(snapshot);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        };
+
     }
 
 
+    private void saveToList(String spin)
+    {
+        String pages = String.valueOf(pageCount);
+        BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
+        databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
+        Toast.makeText(this, "Saved to " + spin + " list", Toast.LENGTH_SHORT).show();
+    }
+
+//    private void showData(DataSnapshot dataSnapshot)
+//    {
+//        String stringRead = dataSnapshot.child("users").child(userId).child("booksRead").getValue(String.class);
+//        int amount = Integer.parseInt(stringRead);
+//        amount = amount+1;
+//        Toast.makeText(this, amount, Toast.LENGTH_SHORT).show();
+//        databaseReference.child("users").child(userId).child("booksRead").setValue(amount);
+//    }
 }
