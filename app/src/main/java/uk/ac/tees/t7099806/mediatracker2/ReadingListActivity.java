@@ -2,6 +2,7 @@ package uk.ac.tees.t7099806.mediatracker2;
 
 import android.os.Bundle;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +56,9 @@ public class ReadingListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reading_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle("Reading List");
+
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -95,7 +99,7 @@ public class ReadingListActivity extends AppCompatActivity {
         adapter = new BookListAdapter(bookInfoFirebaseArrayList, ReadingListActivity.this);
 
         linearLayoutManager = new LinearLayoutManager(ReadingListActivity.this, RecyclerView.VERTICAL, false);
-        recyclerView = (RecyclerView) findViewById(R.id.readingListRec);
+        recyclerView = (RecyclerView) findViewById(R.id.readListRec);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);

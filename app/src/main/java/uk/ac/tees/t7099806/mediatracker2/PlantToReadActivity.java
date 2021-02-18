@@ -1,7 +1,5 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
-import android.animation.ValueAnimator;
-import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -14,7 +12,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +23,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class ReadListActivity extends AppCompatActivity {
+public class PlantToReadActivity extends AppCompatActivity {
 
     private BookInfoFirebase bookInformation;
     private BookListAdapter adapter;
@@ -58,9 +55,8 @@ public class ReadListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle("Read List");
+        toolBarLayout.setTitle("Plan To Read List");
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -68,7 +64,7 @@ public class ReadListActivity extends AppCompatActivity {
         rootRef = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
-        listsRef = rootRef.child("lists").child(userID).child("read list");
+        listsRef = rootRef.child("lists").child(userID).child("plantoreadlist");
 
 
         bookInfoFirebaseArrayList = new ArrayList<>();
@@ -100,14 +96,12 @@ public class ReadListActivity extends AppCompatActivity {
         };
         listsRef.addListenerForSingleValueEvent(valueEventListener);
 
-        adapter = new BookListAdapter(bookInfoFirebaseArrayList, ReadListActivity.this);
+        adapter = new BookListAdapter(bookInfoFirebaseArrayList, PlantToReadActivity.this);
 
-        linearLayoutManager = new LinearLayoutManager(ReadListActivity.this, RecyclerView.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(PlantToReadActivity.this, RecyclerView.VERTICAL, false);
         recyclerView = (RecyclerView) findViewById(R.id.readListRec);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
     }
-
-
 }

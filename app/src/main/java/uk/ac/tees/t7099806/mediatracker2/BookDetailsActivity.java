@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import java.util.List;
 public class BookDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference2;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -50,7 +52,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private Button buttonAddToList;
     private Spinner spinner;
     private String spinValue;
-
+    private String increaseRead;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -98,6 +100,19 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         firebaseUser = firebaseAuth.getCurrentUser();
         userId = firebaseUser.getUid();
 
+        databaseReference2 = FirebaseDatabase.getInstance().getReference();
+        databaseReference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                showData(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 
@@ -133,18 +148,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         if (v == buttonAddToList)
         {
             saveToList(spinValue);
-//            if(spinValue == "Read")
-//            {
-//                saveToReadList();
-//            }
-//            else if(spinValue == "Plan To Read")
-//            {
-//                saveToPlanToReadList();
-//            }
-//            else if(spinValue == "Reading")
-//            {
-//                saveToReadingList();
-//            }
         }
     }
 
@@ -173,15 +176,28 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         String pages = String.valueOf(pageCount);
         BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
         databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
-        Toast.makeText(this, "Saved to " + spin + " list", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Saved to " + spin, Toast.LENGTH_SHORT).show();
+
+        if(spin == "read list")
+        {
+
+            int amount = Integer.parseInt(increaseRead);
+            amount = amount+1;
+            databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
+
+        }
+
+
+
+
     }
 
-//    private void showData(DataSnapshot dataSnapshot)
-//    {
-//        String stringRead = dataSnapshot.child("users").child(userId).child("booksRead").getValue(String.class);
-//        int amount = Integer.parseInt(stringRead);
-//        amount = amount+1;
-//        Toast.makeText(this, amount, Toast.LENGTH_SHORT).show();
-//        databaseReference.child("users").child(userId).child("booksRead").setValue(amount);
-//    }
+    private void showData(DataSnapshot dataSnapshot)
+    {
+        Toast.makeText(this, "Saved to " , Toast.LENGTH_SHORT).show();
+        increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
+              // .setText(dataSnapshot.child("users").child(userId).child("booksRead").getValue(UserInformation.class).getBooksRead());
+    }
+
+
 }
