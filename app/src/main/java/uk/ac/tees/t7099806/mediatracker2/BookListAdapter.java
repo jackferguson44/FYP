@@ -47,7 +47,22 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
 
         Picasso.get().load(bookInfo.getBookImage()).into(holder.bookIV);
 
-        //holder.itemView.setOnClickListener();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, BookDetailsActivity.class);
+                i.putExtra("title", bookInfo.getTitle());
+                i.putExtra("subtitle", bookInfo.getSubTitle());
+                i.putExtra("authors", "add");
+                i.putExtra("publisher", bookInfo.getPublisher());
+                i.putExtra("publishedDate", bookInfo.getPublishDate());
+                i.putExtra("description", bookInfo.getDescription());
+                i.putExtra("pageCount", bookInfo.getNumberOfPages());
+                i.putExtra("thumbnail", bookInfo.getBookImage());
+                i.putExtra("previewLink", "lol");
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

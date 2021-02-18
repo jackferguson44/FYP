@@ -35,7 +35,7 @@ import java.util.List;
 public class BookDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
     private DatabaseReference databaseReference;
-    private DatabaseReference databaseReference2;
+    private DatabaseReference readListsRef;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -53,6 +53,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private Spinner spinner;
     private String spinValue;
     private String increaseRead;
+//    private boolean checkImageBool;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         spinner.setAdapter(myAdapter);
         spinner.setOnItemSelectedListener(this);
 
+//        checkImageBool = false;
 
         title = getIntent().getStringExtra("title");
         subtitle = getIntent().getStringExtra("subtitle");
@@ -100,8 +103,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         firebaseUser = firebaseAuth.getCurrentUser();
         userId = firebaseUser.getUid();
 
-        databaseReference2 = FirebaseDatabase.getInstance().getReference();
-        databaseReference2.addValueEventListener(new ValueEventListener() {
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 showData(snapshot);
@@ -113,12 +116,28 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
+//        readListsRef = databaseReference.child("lists").child(userId).child("read list");
+//        ValueEventListener valueEventListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//              for(DataSnapshot ds : snapshot.getChildren())
+//              {
+//                  String bookImage = ds.child("bookImage").getValue(String.class);
+//                  if(bookImage == thumbnail)
+//                  {
+//                      checkImageBool = true;
+//                      return;
+//                  }
+//              }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        };
+
     }
-
-
-
-
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -151,33 +170,19 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
-    private void saveToReadList()
-    {
-
-        //Toast.makeText(this, "Added to read list", Toast.LENGTH_SHORT).show();
-
-//        ValueEventListener valueEventListener  = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                showData(snapshot);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        };
-
-    }
 
 
     private void saveToList(String spin)
     {
+//        if(checkImageBool == true)
+//        {
+//            Toast.makeText(this, "Alreadry in list", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         String pages = String.valueOf(pageCount);
         BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
         databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
-        //Toast.makeText(this, "Saved to " + spin, Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "Saved to " + spin, Toast.LENGTH_SHORT).show();
         if(spin == "read list")
         {
 
@@ -194,9 +199,17 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void showData(DataSnapshot dataSnapshot)
     {
-        Toast.makeText(this, "Saved to " , Toast.LENGTH_SHORT).show();
         increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
-              // .setText(dataSnapshot.child("users").child(userId).child("booksRead").getValue(UserInformation.class).getBooksRead());
+
+       // for(DataSnapshot ds : dataSnapshot.getChildren())
+//        {
+//            String checkImage = ds.child("users").child(firebaseUser.getUid()).child("read list").getValue().toString();
+//            if(checkImage == thumbnail)
+//            {
+////                checkImageBool = true;
+//                break;
+//            }
+//        }
     }
 
 
