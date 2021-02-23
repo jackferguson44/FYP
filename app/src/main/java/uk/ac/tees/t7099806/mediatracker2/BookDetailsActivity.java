@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,7 +54,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private Spinner spinner;
     private String spinValue;
     private String increaseRead;
-//    private boolean checkImageBool;
+
 
 
     @Override
@@ -172,27 +173,42 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-    private void saveToList(String spin)
+    private void saveToList(final String spin)
     {
-//        if(checkImageBool == true)
-//        {
-//            Toast.makeText(this, "Alreadry in list", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+
         String pages = String.valueOf(pageCount);
-        BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
-        databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
-        Toast.makeText(this, "Saved to " + spin, Toast.LENGTH_SHORT).show();
-        if(spin == "read list")
-        {
+        final BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
 
-            int amount = Integer.parseInt(increaseRead);
-            amount = amount+1;
-            databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
+        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child("read list");
 
-        }
+        checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    toastMaker(true);
 
+                }
+                else
+                {
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
+                    if(spin == "read list")
+                    {
 
+                        int amount = Integer.parseInt(increaseRead);
+                        amount = amount+1;
+                        databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
+
+                    }
+                    toastMaker(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
     }
@@ -201,16 +217,21 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
 
-       // for(DataSnapshot ds : dataSnapshot.getChildren())
-//        {
-//            String checkImage = ds.child("users").child(firebaseUser.getUid()).child("read list").getValue().toString();
-//            if(checkImage == thumbnail)
-//            {
-////                checkImageBool = true;
-//                break;
-//            }
-//        }
     }
+
+    private void toastMaker(Boolean checkC)
+    {
+        if(checkC == true)
+        {
+            Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Added to list", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 
 }
