@@ -61,6 +61,28 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/TVRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="4dp"
+                    android:text="Your Rating: "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    />
+
+                <TextView
+                    android:id="@+id/TVAverageRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="4dp"
+                    android:text="Average Rating: "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    />
+
 
 
             </LinearLayout>

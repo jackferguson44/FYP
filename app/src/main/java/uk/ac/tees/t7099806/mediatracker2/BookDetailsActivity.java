@@ -55,7 +55,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private int pageCount;
     private ArrayList<String> authors;
 
-    private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
+    private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV, ratingTV;
     private ImageView bookIV;
     private Button buttonAddToList;
     private RatingBar ratingBar;
@@ -86,6 +86,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         pageTV = findViewById(R.id.TVNoOfPages);
         publishDateTV = findViewById(R.id.TVPublishDate);
         bookIV = findViewById(R.id.IVbook);
+        ratingTV = findViewById(R.id.TVRating);
 
         buttonAddToList = findViewById(R.id.buttonAddToList);
         buttonAddToList.setOnClickListener(this);
@@ -335,6 +336,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
+                    setButtonToAdd();
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
                     if(spinValue == "read list")
                     {
@@ -342,7 +344,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                         int amount = Integer.parseInt(increaseRead);
                         amount = amount-1;
                         databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
-                        // changeButton(spin);
+
 
                     }
                 }
@@ -376,20 +378,17 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 {
                     toastMaker("exists");
                     System.out.println(snapshot.getKey());
-
                 }
                 else
                 {
+                    setButtonToRemove();
                     System.out.println(snapshot.getKey());
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
                     if(spin == "read list")
                     {
-
                         int amount = Integer.parseInt(increaseRead);
                         amount = amount+1;
                         databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
-                       // changeButton(spin);
-
                     }
                     toastMaker("not exist to add");
                 }
@@ -419,7 +418,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         if(checkC == "exists")
         {
-            Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
         }
         else if(checkC == "not exist to add")
         {
@@ -427,7 +426,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         }
         else
         {
-            Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
         }
 
     }
