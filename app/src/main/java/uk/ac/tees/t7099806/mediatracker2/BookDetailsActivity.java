@@ -368,6 +368,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         String pages = String.valueOf(pageCount);
         final BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
+        final BookInfoData bookInfoData = new BookInfoData(publisher, pages, publishedDate, title, subtitle, description, thumbnail, "0", "0");
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
@@ -384,6 +385,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     setButtonToRemove();
                     System.out.println(snapshot.getKey());
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
+                    databaseReference.child("books").push().setValue(bookInfoData);
                     if(spin == "read list")
                     {
                         int amount = Integer.parseInt(increaseRead);

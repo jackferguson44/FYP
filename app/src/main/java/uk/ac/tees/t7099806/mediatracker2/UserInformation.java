@@ -10,10 +10,14 @@ public class UserInformation {
     public String date;
     public int booksRead;
     public double bookScore;
+    public int bookScoreCount;
     public int showsWatched;
     public Time timeWatched;
     public double showScore;
+    public int showScoreCount;
     public double totalScore;
+    public int totalScoreCount;
+
 
 
     public UserInformation()
@@ -87,4 +91,36 @@ public class UserInformation {
     public String getDate() { return date; }
 
     public void setDate(String date) { this.date = date; }
+
+    public int getBookScoreCount() {
+        return bookScoreCount;
+    }
+
+    public void setBookScoreCount(int bookScoreCount) {
+        this.bookScoreCount = bookScoreCount;
+    }
+
+    public Time getTimeWatched() {
+        return timeWatched;
+    }
+
+    public void setTimeWatched(Time timeWatched) {
+        this.timeWatched = timeWatched;
+    }
+
+    public int getShowScoreCount() {
+        return showScoreCount;
+    }
+
+    public void setShowScoreCount(int showScoreCount) {
+        this.showScoreCount = showScoreCount;
+    }
+
+    public int getTotalScoreCount() {
+        return totalScoreCount;
+    }
+
+    public void setTotalScoreCount(int totalScoreCount) {
+        this.totalScoreCount = totalScoreCount;
+    }
 }
