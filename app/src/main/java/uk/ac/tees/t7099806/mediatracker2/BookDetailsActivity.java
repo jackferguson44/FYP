@@ -23,12 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +48,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String userId;
 
 
+    private String[] parent;
+
 
     private String title, subtitle, publisher, publishedDate, description, thumbnail;
     private int pageCount;
@@ -53,12 +57,15 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
     private ImageView bookIV;
-    private Button buttonAddToList, buttonRemoveFromList;
+    private Button buttonAddToList;
+    private RatingBar ratingBar;
     private Spinner spinner;
     private String spinValue;
     private String increaseRead;
 
     private boolean buttonAdd;
+
+
 
 
     @Override
@@ -110,6 +117,28 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = firebaseAuth.getCurrentUser();
         userId = firebaseUser.getUid();
+
+
+        parent = new String[1];
+
+        ratingBar = findViewById(R.id.bookRatingBar);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                addRating();
+            }
+        });
+//        ratingBar.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_UP)
+//                {
+//                    addRating();
+//                }
+//                return true;
+//            }
+//        });
+
 
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -200,6 +229,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+
+
     private void changeButton(String list)
     {
 
@@ -225,6 +256,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
     }
 
+
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -243,6 +276,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             System.out.println("remove from list button");
             removeFromList();
         }
+
+
     }
 
 
@@ -252,7 +287,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         String pages = String.valueOf(pageCount);
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
-        final String[] parent = new String[1];
+
 
         final Query query = checkRef.orderByChild("bookImage");
         query.addChildEventListener(new ChildEventListener() {
@@ -295,6 +330,15 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 if(snapshot.exists())
                 {
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
+                    if(spinValue == "read list")
+                    {
+
+                        int amount = Integer.parseInt(increaseRead);
+                        amount = amount-1;
+                        databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
+                        // changeButton(spin);
+
+                    }
                 }
                 else
                 {
@@ -374,6 +418,14 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         {
             Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+
+    private void addRating()
+    {
+        String numStarsS = String.valueOf(ratingBar.getRating());
+        System.out.println(numStarsS);
 
     }
 
