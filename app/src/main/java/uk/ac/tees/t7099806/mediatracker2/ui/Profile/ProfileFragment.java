@@ -29,6 +29,8 @@ import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
+
 import uk.ac.tees.t7099806.mediatracker2.EditProfileActivity;
 import uk.ac.tees.t7099806.mediatracker2.LoginActivity;
 import uk.ac.tees.t7099806.mediatracker2.R;
@@ -137,10 +139,19 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         user_name.setText(dataSnapshot.child(userId).getValue(UserInformation.class).getUserName());
         user_join_date.setText("Date Joined: " + dataSnapshot.child(userId).getValue(UserInformation.class).getDate());
         booksReadText.setText(dataSnapshot.child(userId).child("booksRead").getValue().toString());
-        booksScoreText.setText(dataSnapshot.child(userId).child("bookScore").getValue().toString());
+
+        float bockScore = Float.parseFloat(dataSnapshot.child(userId).child("bookScore").getValue().toString());
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String bockScoreString = decimalFormat.format(bockScore);
+        booksScoreText.setText(bockScoreString);
+
         showsWatchedText.setText(dataSnapshot.child(userId).child("showsWatched").getValue().toString());
         showsScoredText.setText(dataSnapshot.child(userId).child("showScore").getValue().toString());
-        averageScoreText.setText(dataSnapshot.child(userId).child("totalScore").getValue().toString());
+
+
+        float averageScore = Float.parseFloat(dataSnapshot.child(userId).child("totalScore").getValue().toString());
+        String averageScoreString = decimalFormat.format(averageScore);
+        averageScoreText.setText(averageScoreString);
 
 
     }

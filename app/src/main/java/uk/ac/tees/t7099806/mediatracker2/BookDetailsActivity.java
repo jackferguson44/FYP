@@ -61,7 +61,13 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private RatingBar ratingBar;
     private Spinner spinner;
     private String spinValue;
+
+
     private String increaseRead;
+    private String changeBookRating;
+    private String changeAverageRating;
+    private String increaseBookScoreCount;
+    private String increaseAverageScoreCount;
 
     private boolean buttonAdd;
 
@@ -401,6 +407,11 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private void showData(DataSnapshot dataSnapshot)
     {
         increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
+        changeBookRating = dataSnapshot.child("users").child(firebaseUser.getUid()).child("bookScore").getValue().toString();
+        changeAverageRating = dataSnapshot.child("users").child(firebaseUser.getUid()).child("totalScore").getValue().toString();
+        increaseBookScoreCount =  dataSnapshot.child("users").child(firebaseUser.getUid()).child("bookScoreCount").getValue().toString();
+        increaseAverageScoreCount = dataSnapshot.child("users").child(firebaseUser.getUid()).child("totalScoreCount").getValue().toString();
+
 
     }
 
@@ -424,8 +435,91 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void addRating()
     {
-        String numStarsS = String.valueOf(ratingBar.getRating());
+        final String numStarsS = String.valueOf(ratingBar.getRating());
+        final int numStars = (int) ratingBar.getRating();
         System.out.println(numStarsS);
+
+        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+
+
+
+        final Query query = checkRef.orderByChild("bookImage");
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String myParent = snapshot.getKey();
+                parent[0] = myParent;
+                System.out.println("myParent: " + myParent);
+                for(DataSnapshot child: snapshot.getChildren())
+                {
+                    String key = child.getKey().toString();
+                    String value = child.getValue().toString();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    System.out.print(parent[0]);
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).child("Rating").setValue(numStarsS);
+
+
+                    int bookScoreCount = Integer.parseInt(increaseBookScoreCount);
+                    float bookRating = Float.parseFloat(changeBookRating);
+                    bookRating = bookRating * bookScoreCount;
+                    bookRating = bookRating + numStars;
+                    bookScoreCount++;
+                    bookRating = bookRating / bookScoreCount;
+
+                    int totalScoreCount = Integer.parseInt(increaseAverageScoreCount);
+                    float averageRating = Float.parseFloat(changeAverageRating);
+                    averageRating = averageRating * totalScoreCount;
+                    averageRating = averageRating + numStars;
+                    totalScoreCount++;
+                    averageRating = averageRating / totalScoreCount;
+
+
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("bookScoreCount").setValue(bookScoreCount);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("bookScore").setValue(bookRating);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("totalScoreCount").setValue(totalScoreCount);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("totalScore").setValue(averageRating);
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
 
     }
 
