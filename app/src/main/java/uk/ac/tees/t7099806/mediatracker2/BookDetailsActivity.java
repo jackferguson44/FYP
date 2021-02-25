@@ -208,12 +208,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 if(snapshot.exists())
                 {
                     setButtonToRemove();
-                    System.out.println("setButtonToRemove");
                 }
                 else
                 {
                     setButtonToAdd();
-                    System.out.println("setButtonToAdd");
                 }
             }
 
@@ -239,10 +237,39 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         }
         if(v == buttonRemoveFromList)
         {
-            saveToList(spinValue);
+            System.out.println("remove from list button");
+            removeFromList();
         }
     }
 
+
+    private void removeFromList()
+    {
+        System.out.println("remove from list method");
+        String pages = String.valueOf(pageCount);
+        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+
+        checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child("-MUM8qdxVVqqIdnYG22w").removeValue();
+                }
+                else
+                {
+                    toastMaker("not exist");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
 
 
     private void saveToList(final String spin)
@@ -258,7 +285,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    toastMaker(true);
+                    toastMaker("exists");
 
                 }
                 else
@@ -273,7 +300,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                        // changeButton(spin);
 
                     }
-                    toastMaker(false);
+                    toastMaker("not exist to add");
                 }
             }
 
@@ -292,15 +319,19 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    private void toastMaker(Boolean checkC)
+    private void toastMaker(String checkC)
     {
-        if(checkC == true)
+        if(checkC == "exists")
         {
             Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
         }
-        else
+        else if(checkC == "not exist to add")
         {
             Toast.makeText(this, "Added to list", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
         }
 
     }
