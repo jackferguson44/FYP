@@ -8,14 +8,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -55,6 +58,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String spinValue;
     private String increaseRead;
 
+    private boolean buttonAdd;
 
 
     @Override
@@ -69,6 +73,9 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         pageTV = findViewById(R.id.TVNoOfPages);
         publishDateTV = findViewById(R.id.TVPublishDate);
         bookIV = findViewById(R.id.IVbook);
+
+        buttonAddToList = findViewById(R.id.buttonAddToList);
+        buttonAddToList.setOnClickListener(this);
 
 //        buttonAddToList = findViewById(R.id.buttonAddToList);
 //        buttonAddToList.setOnClickListener(this);
@@ -163,19 +170,14 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void setButtonToAdd()
     {
-        buttonAddToList = findViewById(R.id.buttonAddToList);
-        buttonAddToList.setOnClickListener(this);
-//        buttonRemoveFromList.setOnClickListener(null);
         buttonAddToList.setText("Add to list");
+        buttonAdd = true;
     }
 
     private void setButtonToRemove()
     {
-        buttonRemoveFromList = findViewById(R.id.buttonAddToList);
-        buttonRemoveFromList.setOnClickListener(this);
-        buttonRemoveFromList.setText("Remove from list");
-        buttonRemoveFromList.setTextSize(12);
-      //  buttonAddToList.setOnClickListener(null);
+        buttonAddToList.setText("Remove Book");
+        buttonAdd = false;
     }
 
     @Override
@@ -231,11 +233,12 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onClick(View v)
     {
-        if (v == buttonAddToList)
+        if (v == buttonAddToList && buttonAdd == true)
         {
+            System.out.println("add tolist button");
             saveToList(spinValue);
         }
-        if(v == buttonRemoveFromList)
+        if(v == buttonAddToList && buttonAdd == false)
         {
             System.out.println("remove from list button");
             removeFromList();
@@ -245,16 +248,53 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void removeFromList()
     {
-        System.out.println("remove from list method");
+
         String pages = String.valueOf(pageCount);
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+
+        final String[] parent = new String[1];
+
+        final Query query = checkRef.orderByChild("bookImage");
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String myParent = snapshot.getKey();
+                parent[0] = myParent;
+                System.out.println("myParent: " + myParent);
+                for(DataSnapshot child: snapshot.getChildren())
+                {
+                    String key = child.getKey().toString();
+                    String value = child.getValue().toString();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child("-MUM8qdxVVqqIdnYG22w").removeValue();
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
                 }
                 else
                 {
@@ -267,7 +307,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
             }
         });
-
 
     }
 
@@ -286,10 +325,12 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 if(snapshot.exists())
                 {
                     toastMaker("exists");
+                    System.out.println(snapshot.getKey());
 
                 }
                 else
                 {
+                    System.out.println(snapshot.getKey());
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
                     if(spin == "read list")
                     {

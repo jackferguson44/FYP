@@ -82,7 +82,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
     }
 
 
-    public class BookViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener{
+    public class BookViewHolder extends  RecyclerView.ViewHolder{
         TextView nameTV, publisherTV, pageCountTV, dateTV;
         ImageView bookIV;
         Button removeFromListTV;
@@ -94,17 +94,8 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
             pageCountTV = itemView.findViewById(R.id.pageCountList);
             dateTV = itemView.findViewById(R.id.bookReleaseDateList);
             bookIV = itemView.findViewById(R.id.bookImageList);
-            removeFromListTV = itemView.findViewById(R.id.removeFromListButton);
-            removeFromListTV.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            if (v == removeFromListTV)
-            {
-                removeFromList();
-            }
-        }
 
         private void removeFromList()
         {
