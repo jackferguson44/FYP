@@ -100,7 +100,7 @@ public class ReadListActivity extends AppCompatActivity {
         };
         listsRef.addListenerForSingleValueEvent(valueEventListener);
 
-        adapter = new BookListAdapter(bookInfoFirebaseArrayList, ReadListActivity.this);
+        adapter = new BookListAdapter(bookInfoFirebaseArrayList, ReadListActivity.this, "read list");
 
         linearLayoutManager = new LinearLayoutManager(ReadListActivity.this, RecyclerView.VERTICAL, false);
         recyclerView = (RecyclerView) findViewById(R.id.readListRec);

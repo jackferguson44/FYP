@@ -36,7 +36,7 @@ import java.util.List;
 public class BookDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
     private DatabaseReference databaseReference;
-    private DatabaseReference readListsRef;
+    private DatabaseReference checkInList;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -50,7 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
     private ImageView bookIV;
-    private Button buttonAddToList;
+    private Button buttonAddToList, buttonRemoveFromList;
     private Spinner spinner;
     private String spinValue;
     private String increaseRead;
@@ -70,8 +70,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         publishDateTV = findViewById(R.id.TVPublishDate);
         bookIV = findViewById(R.id.IVbook);
 
-        buttonAddToList = findViewById(R.id.buttonAddToList);
-        buttonAddToList.setOnClickListener(this);
+//        buttonAddToList = findViewById(R.id.buttonAddToList);
+//        buttonAddToList.setOnClickListener(this);
 
 
         spinner = (Spinner) findViewById(R.id.spinnerAddToList);
@@ -138,6 +138,44 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 //            }
 //        };
 
+        checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantoreadlist");
+        checkInList.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    setButtonToRemove();
+                }
+                else
+                {
+                    setButtonToAdd();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+
+    }
+
+    private void setButtonToAdd()
+    {
+        buttonAddToList = findViewById(R.id.buttonAddToList);
+        buttonAddToList.setOnClickListener(this);
+//        buttonRemoveFromList.setOnClickListener(null);
+        buttonAddToList.setText("Add to list");
+    }
+
+    private void setButtonToRemove()
+    {
+        buttonRemoveFromList = findViewById(R.id.buttonAddToList);
+        buttonRemoveFromList.setOnClickListener(this);
+        buttonRemoveFromList.setText("Remove from list");
+        buttonRemoveFromList.setTextSize(12);
+      //  buttonAddToList.setOnClickListener(null);
     }
 
     @Override
@@ -145,16 +183,46 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         if(parent.getItemAtPosition(position).equals("Plan To Read"))
         {
            spinValue = "plantoreadlist";
+           changeButton("plantoreadlist");
         }
         else if(parent.getItemAtPosition(position).equals("Read"))
         {
             spinValue = "read list";
+            changeButton("read list");
         }
         else
         {
             spinValue = "reading list";
+            changeButton("reading list");
         }
 
+    }
+
+    private void changeButton(String list)
+    {
+
+        checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child(list);
+        checkInList.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    setButtonToRemove();
+                    System.out.println("setButtonToRemove");
+                }
+                else
+                {
+                    setButtonToAdd();
+                    System.out.println("setButtonToAdd");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
     }
 
     @Override
@@ -169,6 +237,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         {
             saveToList(spinValue);
         }
+        if(v == buttonRemoveFromList)
+        {
+            saveToList(spinValue);
+        }
     }
 
 
@@ -179,7 +251,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         String pages = String.valueOf(pageCount);
         final BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
 
-        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child("read list");
+        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -198,6 +270,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                         int amount = Integer.parseInt(increaseRead);
                         amount = amount+1;
                         databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
+                       // changeButton(spin);
 
                     }
                     toastMaker(false);
