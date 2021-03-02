@@ -275,12 +275,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         if (v == buttonAddToList && buttonAdd == true)
         {
-            System.out.println("add tolist button");
             saveToList(spinValue);
         }
         if(v == buttonAddToList && buttonAdd == false)
         {
-            System.out.println("remove from list button");
             removeFromList();
         }
 
@@ -302,7 +300,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String myParent = snapshot.getKey();
                 parent[0] = myParent;
-                System.out.println("myParent: " + myParent);
                 for(DataSnapshot child: snapshot.getChildren())
                 {
                     String key = child.getKey().toString();
@@ -372,20 +369,47 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
+
+        //check book already exists in database
+        final boolean[] checker = new boolean[1];
+        final DatabaseReference checkRefI = databaseReference.child("books");
+        checkRefI.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    checker[0] = true;
+                }
+                else
+                {
+                    checker[0] = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
                     toastMaker("exists");
-                    System.out.println(snapshot.getKey());
                 }
                 else
                 {
                     setButtonToRemove();
-                    System.out.println(snapshot.getKey());
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spin).push().setValue(bookInfoFirebase);
-                    databaseReference.child("books").push().setValue(bookInfoData);
+
+                    if(checker[0] == false)
+                    {
+                        databaseReference.child("books").push().setValue(bookInfoData);
+                    }
+
                     if(spin == "read list")
                     {
                         int amount = Integer.parseInt(increaseRead);
@@ -404,6 +428,14 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
     }
+
+
+
+//    private boolean checkBookExists(String bookI)
+//    {
+//
+//    }
+
 
     private void showData(DataSnapshot dataSnapshot)
     {
@@ -438,7 +470,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         final String numStarsS = String.valueOf(ratingBar.getRating());
         final int numStars = (int) ratingBar.getRating();
-        System.out.println(numStarsS);
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
@@ -450,7 +481,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String myParent = snapshot.getKey();
                 parent[0] = myParent;
-                System.out.println("myParent: " + myParent);
                 for(DataSnapshot child: snapshot.getChildren())
                 {
                     String key = child.getKey().toString();
@@ -485,7 +515,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    System.out.print(parent[0]);
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).child("Rating").setValue(numStarsS);
 
 
