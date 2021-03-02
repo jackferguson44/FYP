@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,14 +50,17 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String userId;
 
 
+    //used to get parent of users book in list in firebase
     private String[] parent;
+    //used to get parent of book in list in firebase
+    private String[] bookParent;
 
 
     private String title, subtitle, publisher, publishedDate, description, thumbnail;
     private int pageCount;
     private ArrayList<String> authors;
 
-    private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV, ratingTV;
+    private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV, ratingTV, avgRatingTV;
     private ImageView bookIV;
     private Button buttonAddToList;
     private RatingBar ratingBar;
@@ -71,7 +76,9 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private boolean buttonAdd;
 
+    private int i;
 
+    private String bookRatingAvg, bookRatingCount;
 
 
     @Override
@@ -87,6 +94,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         publishDateTV = findViewById(R.id.TVPublishDate);
         bookIV = findViewById(R.id.IVbook);
         ratingTV = findViewById(R.id.TVRating);
+        avgRatingTV = findViewById(R.id.TVAverageRating);
 
         buttonAddToList = findViewById(R.id.buttonAddToList);
         buttonAddToList.setOnClickListener(this);
@@ -126,7 +134,9 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         userId = firebaseUser.getUid();
 
 
-        parent = new String[1];
+        parent = new String[999];
+        bookParent = new String[1];
+        i = 0;
 
         ratingBar = findViewById(R.id.bookRatingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -473,41 +483,27 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
+        final String parentAdd;
 
 
-        final Query query = checkRef.orderByChild("bookImage");
-        query.addChildEventListener(new ChildEventListener() {
+        final String[] key = new String[1];
+        Query query = checkRef.orderByChild("bookImage").equalTo(thumbnail);
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String myParent = snapshot.getKey();
-                parent[0] = myParent;
-                for(DataSnapshot child: snapshot.getChildren())
-                {
-                    String key = child.getKey().toString();
-                    String value = child.getValue().toString();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()) {
+                    key[0] = ds.getKey();
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        query.addListenerForSingleValueEvent(valueEventListener);
+
+
 
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -515,7 +511,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).child("Rating").setValue(numStarsS);
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(key[0]).child("Rating").setValue(numStarsS);
 
 
                     int bookScoreCount = Integer.parseInt(increaseBookScoreCount);
@@ -538,8 +534,58 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScoreCount").setValue(totalScoreCount);
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScore").setValue(averageRating);
 
+                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                    String avgRatingSet = decimalFormat.format(bookRating);
+
+                    ratingTV.setText("Your Rating: " + avgRatingSet);
+
+                    addBookRating();
+
 
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        i = 0;
+    }
+
+
+    private void addBookRating()
+    {
+        final String numStarsS = String.valueOf(ratingBar.getRating());
+        final int numStars = (int) ratingBar.getRating();
+
+        final DatabaseReference checkRef = databaseReference.child("books");
+
+
+        final String[] key = new String[1];
+        Query query = checkRef.orderByChild("bookImage").equalTo(thumbnail);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()) {
+                    key[0] = ds.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        query.addListenerForSingleValueEvent(valueEventListener);
+
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                bookRatingAvg = snapshot.child("books").child(key[0]).child("rating").getValue().toString();
+                bookRatingCount = snapshot.child("books").child(key[0]).child("ratingCount").getValue().toString();
             }
 
             @Override
@@ -551,7 +597,60 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
+
+
+
+        checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                 //   databaseReference.child("books").child(parent[0]).child("Rating").setValue(numStarsS);
+
+
+                    int bookScoreCount = Integer.parseInt(bookRatingCount);
+                    float bookRating = Float.parseFloat(bookRatingAvg);
+                    bookRating = bookRating * bookScoreCount;
+                    bookRating = bookRating + numStars;
+                    bookScoreCount++;
+                    bookRating = bookRating / bookScoreCount;
+
+                    int totalScoreCount = Integer.parseInt(increaseAverageScoreCount);
+                    float averageRating = Float.parseFloat(changeAverageRating);
+                    averageRating = averageRating * totalScoreCount;
+                    averageRating = averageRating + numStars;
+                    totalScoreCount++;
+                    averageRating = averageRating / totalScoreCount;
+
+
+                    databaseReference.child("books").child(key[0]).child("rating").setValue(bookRating);
+                    databaseReference.child("books").child(key[0]).child("ratingCount").setValue(bookScoreCount);
+
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                    String avgRatingSet = decimalFormat.format(bookRating);
+
+                    avgRatingTV.setText("Average Rating: " + avgRatingSet);
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+    private void showDataBook(DataSnapshot dataSnapshot, String bookA, String bookT)
+    {
+        bookA = databaseReference.child("books").child(bookParent[0]).child("rating").toString();
+        bookT = databaseReference.child("books").child(bookParent[0]).child("ratingCount").toString();
+    }
+
+
 
 
 
