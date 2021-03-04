@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
 
     <LinearLayout
         android:id="@+id/linearLay"
@@ -18,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Search Books"
+            android:text="Search Movies"
             android:textColor="@color/colorPrimary"
             android:textSize="32sp"
             android:layout_gravity="center"
@@ -26,7 +24,7 @@
 
 
         <EditText
-            android:id="@+id/editSearchBooks"
+            android:id="@+id/editSearchMovies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -39,7 +37,7 @@
 
 
         <Button
-            android:id="@+id/searchBooksButton"
+            android:id="@+id/searchMoviesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -52,15 +50,10 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bookList"
+        android:id="@+id/movieList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/linearLay" />
-
-
-
-
-
 
 
 </RelativeLayout>

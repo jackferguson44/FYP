@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SearchMoviesActivity"
+            android:label="@string/title_activity_search_movies"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".PlantToReadActivity"
             android:label="@string/title_activity_plant_to_read"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ReadingListActivity"
             android:label="@string/title_activity_reading_list"
