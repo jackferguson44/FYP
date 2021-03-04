@@ -32,7 +32,7 @@ import java.util.List;
 public class SearchMoviesActivity extends AppCompatActivity {
 
 
-    private static String JSON_URL = "https://run.mocky.io/v3/79f722b0-a730-42a0-99aa-36029861f115";
+    private static String JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
 
     private RequestQueue requestQueue;
     private ArrayList<MovieInformation> moviesInfoArrayList;
@@ -117,15 +117,18 @@ public class SearchMoviesActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObject = new JSONObject(s);
-                JSONArray jsonArray = jsonObject.getJSONArray("moviz");
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
 
                 for(int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                     MovieInformation movieInformation = new MovieInformation();
-                    movieInformation.setName(jsonObject1.getString("name"));
-                    movieInformation.setImage(jsonObject1.getString("image"));
+                    movieInformation.setName(jsonObject1.getString("title"));
+                    movieInformation.setImage(jsonObject1.getString("poster_path"));
+                    movieInformation.setReleaseDate(jsonObject1.getString("release_date"));
+                    movieInformation.setLanguage(jsonObject1.getString("original_language"));
+                    movieInformation.setGenre("16");
 
                     moviesInfoArrayList.add(movieInformation);
 

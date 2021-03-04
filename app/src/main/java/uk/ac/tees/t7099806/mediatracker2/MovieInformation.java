@@ -5,11 +5,19 @@ public class MovieInformation {
     String id;
     String name;
     String image;
+    String overview;
+    String releaseDate;
+    String language;
+    String genre;
 
-    public MovieInformation(String id, String name, String image) {
+    public MovieInformation(String id, String name, String image, String overview, String releaseDate, String language, String genre) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.language = language;
+        this.genre = genre;
     }
 
     public MovieInformation()
@@ -39,5 +47,37 @@ public class MovieInformation {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 }
