@@ -81,6 +81,12 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String bookRatingAvg, bookRatingCount;
 
 
+    private DatabaseReference bookImage;
+    private String bookKey;
+    private Query bookQuery;
+    private boolean bookExists;
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,6 +217,57 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
             }
         });
+
+
+        bookImage = databaseReference.child("books");
+        //private String bookKey;
+        bookQuery = bookImage.orderByChild("bookImage").equalTo(thumbnail);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren())
+                {
+                    bookKey = ds.getKey();
+                    System.out.println("bookKey: " + bookKey);
+                    if(ds.exists())
+                    {
+
+                        bookExists = true;
+                    }
+                    else
+                    {
+                        bookExists = false;
+                        System.out.println("bookKey: " + bookKey);
+                    }
+
+                }
+                
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        bookQuery.addListenerForSingleValueEvent(valueEventListener);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                if(bookExists == true)
+                {
+                    avgRatingTV.setText(snapshot.child("books").child(bookKey).child("rating").getValue().toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
     }
 
@@ -486,6 +543,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         final String parentAdd;
 
 
+
         final String[] key = new String[1];
         Query query = checkRef.orderByChild("bookImage").equalTo(thumbnail);
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -493,6 +551,32 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     key[0] = ds.getKey();
+
+                    final DatabaseReference checkRatingExists;
+                    checkRatingExists = checkRef.child(key[0]);
+
+                    checkRatingExists.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot data: snapshot.getChildren())
+                            {
+                                if(data.child("Rating").exists())
+                                {
+
+                                    System.out.println("Rating exists");
+                                }
+                                else
+                                {
+                                    System.out.println("Rating dont exist");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
@@ -502,6 +586,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         };
         query.addListenerForSingleValueEvent(valueEventListener);
+
+
 
 
 
@@ -535,7 +621,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScore").setValue(averageRating);
 
                     DecimalFormat decimalFormat = new DecimalFormat("#.00");
-                    String avgRatingSet = decimalFormat.format(bookRating);
+                    String avgRatingSet = decimalFormat.format(numStars);
 
                     ratingTV.setText("Your Rating: " + avgRatingSet);
 
@@ -553,6 +639,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         i = 0;
     }
+
+
+
+
 
 
     private void addBookRating()
@@ -593,11 +683,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
             }
         });
-
-
-
-
-
 
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
