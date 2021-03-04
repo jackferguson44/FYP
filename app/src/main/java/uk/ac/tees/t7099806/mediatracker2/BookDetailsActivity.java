@@ -85,6 +85,9 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String bookKey;
     private Query bookQuery;
     private boolean bookExists;
+    private DecimalFormat decimalFormat;
+    private String avgBookRatingSet;
+    private float bookS;
 
 
     @Override
@@ -104,6 +107,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         buttonAddToList = findViewById(R.id.buttonAddToList);
         buttonAddToList.setOnClickListener(this);
+
+        decimalFormat =  new DecimalFormat("#.00");
 
 //        buttonAddToList = findViewById(R.id.buttonAddToList);
 //        buttonAddToList.setOnClickListener(this);
@@ -220,28 +225,12 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
         bookImage = databaseReference.child("books");
-        //private String bookKey;
         bookQuery = bookImage.orderByChild("bookImage").equalTo(thumbnail);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren())
-                {
-                    bookKey = ds.getKey();
-                    System.out.println("bookKey: " + bookKey);
-                    if(ds.exists())
-                    {
+                getBookId(snapshot);
 
-                        bookExists = true;
-                    }
-                    else
-                    {
-                        bookExists = false;
-                        System.out.println("bookKey: " + bookKey);
-                    }
-
-                }
-                
             }
 
             @Override
@@ -255,10 +244,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-                if(bookExists == true)
-                {
-                    avgRatingTV.setText(snapshot.child("books").child(bookKey).child("rating").getValue().toString());
-                }
+                setBookAvgRating(snapshot);
 
             }
 
@@ -269,6 +255,38 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
+    }
+
+    private void getBookId(DataSnapshot snapshot)
+    {
+        for(DataSnapshot ds : snapshot.getChildren())
+        {
+
+            bookKey = ds.getKey();
+            System.out.println("bookKey: " + bookKey);
+            if(ds.exists())
+            {
+
+                bookExists = true;
+            }
+            else
+            {
+                bookExists = false;
+                System.out.println("bookKey: " + bookKey);
+            }
+
+        }
+
+    }
+
+    private void setBookAvgRating(DataSnapshot snapshot)
+    {
+        if(bookExists == true)
+        {
+            bookS = Float.parseFloat(snapshot.child("books").child(bookKey).child("rating").getValue().toString());
+            avgBookRatingSet = decimalFormat.format(bookS);
+            avgRatingTV.setText("Average rating: " + avgBookRatingSet);
+        }
     }
 
     private void setButtonToAdd()
@@ -620,7 +638,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScoreCount").setValue(totalScoreCount);
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScore").setValue(averageRating);
 
-                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
                     String avgRatingSet = decimalFormat.format(numStars);
 
                     ratingTV.setText("Your Rating: " + avgRatingSet);
@@ -712,7 +730,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     databaseReference.child("books").child(key[0]).child("ratingCount").setValue(bookScoreCount);
 
 
-                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
                     String avgRatingSet = decimalFormat.format(bookRating);
 
                     avgRatingTV.setText("Average Rating: " + avgRatingSet);
