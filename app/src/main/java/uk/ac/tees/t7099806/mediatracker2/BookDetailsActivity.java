@@ -81,13 +81,20 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String bookRatingAvg, bookRatingCount;
 
 
-    private DatabaseReference bookImage;
+    private DatabaseReference bookRef;
     private String bookKey;
     private Query bookQuery;
     private boolean bookExists;
     private DecimalFormat decimalFormat;
     private String avgBookRatingSet;
     private float bookS;
+
+    private DatabaseReference listRef;
+    private String listKey;
+    private Query listQuery;
+    private boolean listExist;
+    private String avgListRatingSet;
+    private float listS;
 
 
     @Override
@@ -109,6 +116,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         buttonAddToList.setOnClickListener(this);
 
         decimalFormat =  new DecimalFormat("#.00");
+
+        spinValue ="plantoreadlist";
 
 //        buttonAddToList = findViewById(R.id.buttonAddToList);
 //        buttonAddToList.setOnClickListener(this);
@@ -156,16 +165,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 addRating();
             }
         });
-//        ratingBar.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_UP)
-//                {
-//                    addRating();
-//                }
-//                return true;
-//            }
-//        });
+
 
 
 
@@ -181,26 +181,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-//        readListsRef = databaseReference.child("lists").child(userId).child("read list");
-//        ValueEventListener valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//              for(DataSnapshot ds : snapshot.getChildren())
-//              {
-//                  String bookImage = ds.child("bookImage").getValue(String.class);
-//                  if(bookImage == thumbnail)
-//                  {
-//                      checkImageBool = true;
-//                      return;
-//                  }
-//              }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        };
+
 
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantoreadlist");
         checkInList.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -224,8 +205,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
-        bookImage = databaseReference.child("books");
-        bookQuery = bookImage.orderByChild("bookImage").equalTo(thumbnail);
+        bookRef = databaseReference.child("books");
+        bookQuery = bookRef.orderByChild("bookImage").equalTo(thumbnail);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -240,11 +221,31 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         };
         bookQuery.addListenerForSingleValueEvent(valueEventListener);
 
+
+
+
+        listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+        listQuery = listRef.orderByChild("bookImage").equalTo(thumbnail);
+        ValueEventListener valueEventListener1 = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                getListId(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        listQuery.addListenerForSingleValueEvent(valueEventListener1);
+
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 setBookAvgRating(snapshot);
+                setListAvgRating(snapshot);
 
             }
 
@@ -263,7 +264,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         {
 
             bookKey = ds.getKey();
-            System.out.println("bookKey: " + bookKey);
             if(ds.exists())
             {
 
@@ -272,7 +272,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             else
             {
                 bookExists = false;
-                System.out.println("bookKey: " + bookKey);
             }
 
         }
@@ -283,9 +282,39 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         if(bookExists == true)
         {
+            System.out.println("book rating: "  + snapshot.child("books").child(bookKey).child("rating").getValue().toString());
             bookS = Float.parseFloat(snapshot.child("books").child(bookKey).child("rating").getValue().toString());
             avgBookRatingSet = decimalFormat.format(bookS);
             avgRatingTV.setText("Average rating: " + avgBookRatingSet);
+        }
+    }
+
+
+    private void setListAvgRating(DataSnapshot snapshot)
+    {
+        if(listExist == true)
+        {
+            listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
+            avgListRatingSet = decimalFormat.format(listS);
+            ratingTV.setText("Your rating: " + avgListRatingSet);
+        }
+    }
+
+    private void getListId(DataSnapshot snapshot)
+    {
+        for(DataSnapshot ds : snapshot.getChildren())
+        {
+            listKey = ds.getKey();
+            System.out.println("list key: " + listKey);
+            if(ds.exists())
+            {
+                listExist = true;
+
+            }
+            else
+            {
+                listExist = false;
+            }
         }
     }
 
@@ -678,6 +707,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     key[0] = ds.getKey();
+
                 }
             }
 
