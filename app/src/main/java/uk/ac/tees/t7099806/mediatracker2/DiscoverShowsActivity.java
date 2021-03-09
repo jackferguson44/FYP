@@ -29,10 +29,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchMoviesActivity extends AppCompatActivity {
+public class DiscoverShowsActivity extends AppCompatActivity {
 
 
-    private static String JSON_URL =  "https://api.themoviedb.org/3/search/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query="; //"https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
+    private static String JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
 
     private RequestQueue requestQueue;
     private ArrayList<MovieInformation> moviesInfoArrayList;
@@ -43,32 +43,18 @@ public class SearchMoviesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_movies);
-
+        setContentView(R.layout.activity_discover_shows);
 
         moviesInfoArrayList = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.movieList);
+        recyclerView = findViewById(R.id.popularMovieList);
 
-        searchEdt = findViewById(R.id.editSearchMovies);
-        searchBtn = findViewById(R.id.searchMoviesButton);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchEdt.getText().toString().isEmpty()) {
-                    searchEdt.setError("Please enter search query");
-                    return;
-                }
-                String search = searchEdt.getText().toString();
-                JSON_URL = JSON_URL + search;
+        GetPopularMovieData getPopularMovieData = new GetPopularMovieData();
+        getPopularMovieData.execute();
 
-                GetMovieData getMovieData = new GetMovieData();
-                getMovieData.execute();
-            }
-        });
     }
 
-    public class GetMovieData extends AsyncTask<String, String, String>
+    public class GetPopularMovieData extends AsyncTask<String, String, String>
     {
 
 
@@ -153,6 +139,4 @@ public class SearchMoviesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
     }
-
-
 }

@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Search Shows/movies"
+        android:text="Search Shows/Movies"
         android:textColor="@color/colorPrimary"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"

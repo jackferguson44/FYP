@@ -41,8 +41,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         final MovieInformation movieInformation = movieInformationList.get(position);
         holder.name.setText(movieInformation.getName());
-        holder.release.setText(movieInformation.getReleaseDate());
-        holder.language.setText(movieInformation.getLanguage());
+        holder.release.setText("Release Date: " + movieInformation.getReleaseDate());
+        holder.language.setText("Language: " + movieInformation.getLanguage());
 
         int genre = Integer.parseInt(movieInformation.getGenre());
         genreString = "";
