@@ -111,7 +111,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         releaseTV.setText("Release Date: " +release);
         overviewTV.setText(overview);
         runTimeTV.setText("Runtime: ");
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/" + backDrop).into(backDropIV);
+
+        if(backDrop == "null")
+        {
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/" + image).into(backDropIV);
+        }
+        else
+        {
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/" + backDrop).into(backDropIV);
+        }
+
 
         buttonAddToList = findViewById(R.id.buttonAddShowToList);
         buttonAddToList.setOnClickListener(this);
@@ -157,7 +166,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantowatchlist");
-        checkInList.orderByChild("bookImage").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkInList.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -177,8 +186,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-        movieRef = databaseReference.child("movies");
-        movieQuery = movieRef.orderByChild("backDropPath").equalTo(backDrop);
+        movieRef = databaseReference.child("shows");
+        movieQuery = movieRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -195,7 +204,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
         listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
-        listQuery = listRef.orderByChild("backDropPath").equalTo(backDrop);
+        listQuery = listRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -267,7 +276,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         //check book already exists in database
         final boolean[] checker = new boolean[1];
         final DatabaseReference checkRefI = databaseReference.child("movies");
-        checkRefI.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkRefI.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -287,7 +296,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         });
 
 
-        checkRef.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -330,7 +339,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
 
-        final Query query = checkRef.orderByChild("backDropPath");
+        final Query query = checkRef.orderByChild("image");
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -364,7 +373,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-        checkRef.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -405,7 +414,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
         final String[] key = new String[1];
-        Query query = checkRef.orderByChild("backDropPath").equalTo(backDrop);
+        Query query = checkRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -427,7 +436,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                                 }
                                 else
                                 {
-                                    System.out.println("Rating dont exist");
+
                                 }
                             }
                         }
@@ -448,11 +457,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         query.addListenerForSingleValueEvent(valueEventListener);
 
 
-
-
-
-
-        checkRef.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -460,12 +465,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(key[0]).child("Rating").setValue(numStarsS);
 
 
-                    int bookScoreCount = Integer.parseInt(increaseMovieScoreCount);
-                    float bookRating = Float.parseFloat(changeMovieRating);
-                    bookRating = bookRating * bookScoreCount;
-                    bookRating = bookRating + numStars;
-                    bookScoreCount++;
-                    bookRating = bookRating / bookScoreCount;
+                    int showScoreCount = Integer.parseInt(increaseMovieScoreCount);
+                    float showRating = Float.parseFloat(changeMovieRating);
+                    showRating = showRating * showScoreCount;
+                    showRating = showRating + numStars;
+                    showScoreCount++;
+                    showRating = showRating / showScoreCount;
 
                     int totalScoreCount = Integer.parseInt(increaseAverageScoreCount);
                     float averageRating = Float.parseFloat(changeAverageRating);
@@ -475,8 +480,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                     averageRating = averageRating / totalScoreCount;
 
 
-                    databaseReference.child("users").child(firebaseUser.getUid()).child("showScoreCount").setValue(bookScoreCount);
-                    databaseReference.child("users").child(firebaseUser.getUid()).child("showScore").setValue(bookRating);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("showScoreCount").setValue(showScoreCount);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("showScore").setValue(showRating);
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScoreCount").setValue(totalScoreCount);
                     databaseReference.child("users").child(firebaseUser.getUid()).child("totalScore").setValue(averageRating);
 
@@ -509,7 +514,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
         final String[] key = new String[1];
-        Query query = checkRef.orderByChild("backDropPath").equalTo(backDrop);
+        Query query = checkRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -541,7 +546,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         });
 
 
-        checkRef.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -565,7 +570,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
                     databaseReference.child("shows").child(key[0]).child("rating").setValue(movieRating);
-                    databaseReference.child("books").child(key[0]).child("ratingCount").setValue(movieScoreCount);
+                    databaseReference.child("shows").child(key[0]).child("ratingCount").setValue(movieScoreCount);
 
 
                     String avgRatingSet = decimalFormat.format(movieRating);
@@ -640,7 +645,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     private void changeButton(String list)
     {
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child(list);
-        checkInList.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+        checkInList.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -675,7 +680,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             movieKey = ds.getKey();
             if(ds.exists())
             {
-
                 movieExists = true;
             }
             else
@@ -691,7 +695,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         for(DataSnapshot ds : snapshot.getChildren())
         {
             listKey = ds.getKey();
-            System.out.println("list key: " + listKey);
             if(ds.exists())
             {
                 listExist = true;
@@ -706,6 +709,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     private void setMovieAvgRating(DataSnapshot snapshot)
     {
+        System.out.println("movieExists doesn't exist");
         if(movieExists == true)
         {
             System.out.println("Movie rating: "  + snapshot.child("shows").child(movieKey).child("rating").getValue().toString());

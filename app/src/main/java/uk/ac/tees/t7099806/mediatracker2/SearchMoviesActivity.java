@@ -140,7 +140,6 @@ public class SearchMoviesActivity extends AppCompatActivity {
                     String genre = jsonObject1.getString("genre_ids");
                     String splitGenre = genre.split(",")[0];
                     splitGenre = splitGenre.replaceAll("\\p{P}","");
-                    System.out.println("before if: " + splitGenre);
                     if(splitGenre.isEmpty())
                     {
                         movieInformation.setGenre("23");
