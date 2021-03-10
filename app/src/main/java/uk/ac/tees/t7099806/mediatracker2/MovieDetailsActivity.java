@@ -6,6 +6,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,9 +16,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -179,7 +182,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               // getMovieId(snapshot);
+               getMovieId(snapshot);
 
             }
 
@@ -197,7 +200,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-               // getListId(snapshot);
+               getListId(snapshot);
             }
 
             @Override
@@ -212,8 +215,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-              //  setMovieAvgRating(snapshot);
-               // setListAvgRating(snapshot);
+                setMovieAvgRating(snapshot);
+                setListAvgRating(snapshot);
 
             }
 
@@ -246,7 +249,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         }
         if(v == buttonAddToList && buttonAdd == false)
         {
-            //removeFromList();
+            removeFromList();
         }
 
     }
@@ -301,7 +304,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                         databaseReference.child("shows").push().setValue(movieInfoData);
                     }
 
-                    if(spin == "read list")
+                    if(spin == "watched list")
                     {
                         int amount = Integer.parseInt(increaseWatched);
                         amount = amount+1;
@@ -318,6 +321,77 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         });
 
 
+    }
+
+    private void removeFromList()
+    {
+
+        final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+
+
+
+        final Query query = checkRef.orderByChild("backDropPath");
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String myParent = snapshot.getKey();
+                parent[0] = myParent;
+                for(DataSnapshot child: snapshot.getChildren())
+                {
+                    String key = child.getKey().toString();
+                    String value = child.getValue().toString();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        checkRef.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    setButtonToAdd();
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
+                    if(spinValue == "watched list")
+                    {
+
+                        int amount = Integer.parseInt(increaseWatched);
+                        amount = amount-1;
+                        databaseReference.child("users").child(firebaseUser.getUid()).child("showsWatched").setValue(amount);
+
+
+                    }
+                }
+                else
+                {
+                    toastMaker("not exist");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void addRating()
@@ -522,6 +596,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     private void setButtonToRemove()
     {
         buttonAddToList.setText("Remove from list");
+        buttonAddToList.setTextSize(12);
         buttonAdd = false;
     }
 
@@ -544,11 +619,110 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getItemAtPosition(position).equals("Plan To Watch"))
+        {
+            spinValue = "plantowatchlist";
+            changeButton("plantowatchlist");
+        }
+        else if(parent.getItemAtPosition(position).equals("Watched"))
+        {
+            spinValue = "watched list";
+            changeButton("watched list");
+        }
+        else
+        {
+            spinValue = "watching list";
+            changeButton("watching list");
+        }
 
+    }
+
+    private void changeButton(String list)
+    {
+        checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child(list);
+        checkInList.orderByChild("backDropPath").equalTo(backDrop).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    setButtonToRemove();
+                }
+                else
+                {
+                    setButtonToAdd();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+
+    private void getMovieId(DataSnapshot snapshot)
+    {
+        for(DataSnapshot ds : snapshot.getChildren())
+        {
+
+            movieKey = ds.getKey();
+            if(ds.exists())
+            {
+
+                movieExists = true;
+            }
+            else
+            {
+                movieExists = false;
+            }
+
+        }
+    }
+
+    private void getListId(DataSnapshot snapshot)
+    {
+        for(DataSnapshot ds : snapshot.getChildren())
+        {
+            listKey = ds.getKey();
+            System.out.println("list key: " + listKey);
+            if(ds.exists())
+            {
+                listExist = true;
+
+            }
+            else
+            {
+                listExist = false;
+            }
+        }
+    }
+
+    private void setMovieAvgRating(DataSnapshot snapshot)
+    {
+        if(movieExists == true)
+        {
+            System.out.println("Movie rating: "  + snapshot.child("shows").child(movieKey).child("rating").getValue().toString());
+            movieS = Float.parseFloat(snapshot.child("shows").child(movieKey).child("rating").getValue().toString());
+            avgMovieRatingSet = decimalFormat.format(movieS);
+            avgRatingTV.setText("Average rating: " + avgMovieRatingSet);
+
+        }
+    }
+
+    private void setListAvgRating(DataSnapshot snapshot)
+    {
+        if(listExist == true)
+        {
+            listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
+            avgListRatingSet = decimalFormat.format(listS);
+            yourRatingTV.setText("Your rating: " + avgListRatingSet);
+        }
     }
 }

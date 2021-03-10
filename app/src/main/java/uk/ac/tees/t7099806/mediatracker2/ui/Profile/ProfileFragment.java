@@ -145,8 +145,13 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         String bockScoreString = decimalFormat.format(bockScore);
         booksScoreText.setText(bockScoreString);
 
+
+
         showsWatchedText.setText(dataSnapshot.child(userId).child("showsWatched").getValue().toString());
-        showsScoredText.setText(dataSnapshot.child(userId).child("showScore").getValue().toString());
+
+        float showScore = Float.parseFloat(dataSnapshot.child(userId).child("showScore").getValue().toString());
+        String showScoreString = decimalFormat.format(showScore);
+        showsScoredText.setText(showScoreString);
 
 
         float averageScore = Float.parseFloat(dataSnapshot.child(userId).child("totalScore").getValue().toString());
