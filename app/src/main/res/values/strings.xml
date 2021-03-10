@@ -24,6 +24,11 @@
         <item>Reading</item>
         <item>Read</item>
     </string-array>
+    <string-array name="spinner_list_2">
+        <item>Plan To Watch</item>
+        <item>Watching</item>
+        <item>Watched</item>
+    </string-array>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

@@ -31,6 +31,24 @@
             android:layout_height="100dp"
             android:text="Read List"/>
 
+        <Button
+            android:id="@+id/plantToWatchButton"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="Plan To Watch List"/>
+
+        <Button
+            android:id="@+id/watchingButton"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="Watching List"/>
+
+        <Button
+            android:id="@+id/watchedButton"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="Watched List"/>
+
 
 
     </LinearLayout>

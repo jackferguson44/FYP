@@ -156,7 +156,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         parent = new String[999];
         bookParent = new String[1];
-        i = 0;
+        //i = 0;
 
         ratingBar = findViewById(R.id.bookRatingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

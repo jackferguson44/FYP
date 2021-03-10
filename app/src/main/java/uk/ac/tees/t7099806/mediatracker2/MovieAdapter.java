@@ -76,6 +76,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             public void onClick(View v) {
                 Intent i = new Intent(context, MovieDetailsActivity.class);
                 i.putExtra("title", movieInformation.getName());
+                i.putExtra("image", movieInformation.getImage());
+                i.putExtra("language", movieInformation.getLanguage());
                 i.putExtra("genre", genreString);
                 i.putExtra("release date", movieInformation.getReleaseDate());
                 i.putExtra("overview", movieInformation.getOverview());

@@ -1,7 +1,6 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
-public class MovieInformation {
-
+public class MovieInfoData {
 
     String name;
     String image;
@@ -10,8 +9,10 @@ public class MovieInformation {
     String language;
     String genre;
     String backDropPath;
+    String rating;
+    String ratingCount;
 
-    public MovieInformation(String name, String image, String overview, String releaseDate, String language, String genre, String backDropPath) {
+    public MovieInfoData(String name, String image, String overview, String releaseDate, String language, String genre, String backDropPath, String rating, String ratingCount ) {
         this.name = name;
         this.image = image;
         this.overview = overview;
@@ -19,9 +20,11 @@ public class MovieInformation {
         this.language = language;
         this.genre = genre;
         this.backDropPath = backDropPath;
+        this.rating = rating;
+        this.ratingCount = ratingCount;
     }
 
-    public MovieInformation()
+    public MovieInfoData()
     {
 
     }
@@ -82,5 +85,21 @@ public class MovieInformation {
 
     public void setBackDropPath(String backDropPath) {
         this.backDropPath = backDropPath;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(String ratingCount) {
+        this.ratingCount = ratingCount;
     }
 }
