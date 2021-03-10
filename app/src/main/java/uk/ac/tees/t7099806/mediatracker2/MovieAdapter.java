@@ -1,6 +1,7 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
 
         Picasso.get().load("https://image.tmdb.org/t/p/w500/" +movieInformation.getImage()).into(holder.image);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, MovieDetailsActivity.class);
+                i.putExtra("title", movieInformation.getName());
+                i.putExtra("genre", genreString);
+                i.putExtra("release date", movieInformation.getReleaseDate());
+                i.putExtra("overview", movieInformation.getOverview());
+                i.putExtra("backdrop", movieInformation.getBackDropPath());
+
+                context.startActivity(i);
+
+
+            }
+        });
 
     }
 
@@ -155,6 +172,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             release = itemView.findViewById(R.id.pageCount);
             language = itemView.findViewById(R.id.bookReleaseDate);
             genre = itemView.findViewById(R.id.publisher);
+
 
         }
     }
