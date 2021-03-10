@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".MovieDetailsActivity"
+            android:label="@string/title_activity_movie_details_page"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".DiscoverShowsActivity"
             android:label="@string/title_activity_discover_shows"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchMoviesActivity"
             android:label="@string/title_activity_search_movies"

@@ -44,10 +44,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.release.setText("Release Date: " + movieInformation.getReleaseDate());
         holder.language.setText("Language: " + movieInformation.getLanguage());
 
+
         int genre = Integer.parseInt(movieInformation.getGenre());
         genreString = "";
         getGenre(genre);
         holder.genre.setText(genreString);
+
+//        if(movieInformation.getGenre() != "" || movieInformation.getGenre() == null)
+//        {
+//            System.out.println(movieInformation.getGenre());
+//            int genre = Integer.parseInt(movieInformation.getGenre());
+//            genreString = "";
+//            getGenre(genre);
+//            holder.genre.setText(genreString);
+//        }
+//        else
+//        {
+//            genreString = "null";
+//            holder.genre.setText(genreString);
+//        }
+
 
         //https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg
 
@@ -110,6 +126,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 break;
             case 37:
                 genreString = "Western";
+            case 23:
+                genreString = "null";
+
 
 
         }

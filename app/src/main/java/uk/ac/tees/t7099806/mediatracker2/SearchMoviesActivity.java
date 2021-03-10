@@ -141,13 +141,14 @@ public class SearchMoviesActivity extends AppCompatActivity {
                     String splitGenre = genre.split(",")[0];
                     splitGenre = splitGenre.replaceAll("\\p{P}","");
                     System.out.println("before if: " + splitGenre);
-//                    if(splitGenre.contains("]"))
-//                    {
-//                        splitGenre.replaceAll("]", "");
-//                        System.out.println(splitGenre);
-//                    }
-                    movieInformation.setGenre(splitGenre);
-
+                    if(splitGenre.isEmpty())
+                    {
+                        movieInformation.setGenre("23");
+                    }
+                    else
+                    {
+                        movieInformation.setGenre(splitGenre);
+                    }
                     moviesInfoArrayList.add(movieInformation);
 
 

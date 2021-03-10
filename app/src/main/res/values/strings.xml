@@ -117,6 +117,7 @@
     <string name="title_activity_plant_to_read">ScrollingActivity</string>
     <string name="title_activity_search_movies">SearchMoviesActivity</string>
     <string name="title_activity_discover_shows">DiscoverShowsActivity</string>
+    <string name="title_activity_movie_details_page">MovieDetailsPage</string>
 
 
 </resources>
