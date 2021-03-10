@@ -32,7 +32,7 @@ import java.util.List;
 public class SearchMoviesActivity extends AppCompatActivity {
 
 
-    private static String JSON_URL =  "https://api.themoviedb.org/3/search/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query="; //"https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
+    private static String JSON_URL =  "https://api.themoviedb.org/3/search/multi?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query="; //"https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
 
     private RequestQueue requestQueue;
     private ArrayList<MovieInformation> moviesInfoArrayList;
@@ -59,7 +59,9 @@ public class SearchMoviesActivity extends AppCompatActivity {
                     searchEdt.setError("Please enter search query");
                     return;
                 }
+                JSON_URL =  "https://api.themoviedb.org/3/search/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query=";
                 String search = searchEdt.getText().toString();
+                search.replaceAll(" ", "+");
                 JSON_URL = JSON_URL + search;
 
                 GetMovieData getMovieData = new GetMovieData();
@@ -118,6 +120,8 @@ public class SearchMoviesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
 
+            moviesInfoArrayList.clear();
+
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
@@ -131,7 +135,18 @@ public class SearchMoviesActivity extends AppCompatActivity {
                     movieInformation.setImage(jsonObject1.getString("poster_path"));
                     movieInformation.setReleaseDate(jsonObject1.getString("release_date"));
                     movieInformation.setLanguage(jsonObject1.getString("original_language"));
-                    movieInformation.setGenre("16");
+                    movieInformation.setOverview(jsonObject1.getString("overview"));
+                    movieInformation.setBackDropPath(jsonObject1.getString("backdrop_path"));
+                    String genre = jsonObject1.getString("genre_ids");
+                    String splitGenre = genre.split(",")[0];
+                    splitGenre = splitGenre.replaceAll("\\p{P}","");
+                    System.out.println("before if: " + splitGenre);
+//                    if(splitGenre.contains("]"))
+//                    {
+//                        splitGenre.replaceAll("]", "");
+//                        System.out.println(splitGenre);
+//                    }
+                    movieInformation.setGenre(splitGenre);
 
                     moviesInfoArrayList.add(movieInformation);
 

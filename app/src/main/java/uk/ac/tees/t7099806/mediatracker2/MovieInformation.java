@@ -9,8 +9,9 @@ public class MovieInformation {
     String releaseDate;
     String language;
     String genre;
+    String backDropPath;
 
-    public MovieInformation(String id, String name, String image, String overview, String releaseDate, String language, String genre) {
+    public MovieInformation(String id, String name, String image, String overview, String releaseDate, String language, String genre, String backDropPath) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -18,6 +19,7 @@ public class MovieInformation {
         this.releaseDate = releaseDate;
         this.language = language;
         this.genre = genre;
+        this.backDropPath = backDropPath;
     }
 
     public MovieInformation()
@@ -79,5 +81,13 @@ public class MovieInformation {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getBackDropPath() {
+        return backDropPath;
+    }
+
+    public void setBackDropPath(String backDropPath) {
+        this.backDropPath = backDropPath;
     }
 }
