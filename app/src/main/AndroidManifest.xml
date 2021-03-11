@@ -13,9 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SplashScreenActivity"
+            android:label="@string/title_activity_splash_screen"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".WatchedActivity"
             android:label="@string/title_activity_watched"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".WatchingListActivity"
             android:label="@string/title_activity_watching_list"
@@ -72,11 +82,6 @@
             android:name=".LoginActivity"
             android:label="LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
