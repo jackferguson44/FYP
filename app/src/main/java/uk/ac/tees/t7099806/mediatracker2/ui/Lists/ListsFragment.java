@@ -14,16 +14,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import uk.ac.tees.t7099806.mediatracker2.PlanToWatchActivity;
 import uk.ac.tees.t7099806.mediatracker2.PlantToReadActivity;
 import uk.ac.tees.t7099806.mediatracker2.R;
 import uk.ac.tees.t7099806.mediatracker2.ReadListActivity;
 import uk.ac.tees.t7099806.mediatracker2.ReadingListActivity;
+import uk.ac.tees.t7099806.mediatracker2.WatchingListActivity;
 
 public class ListsFragment extends Fragment implements View.OnClickListener {
 
     private ListsViewModel listsViewModel;
 
-    Button readButton, readingButton, planToReadButton;
+    Button readButton, readingButton, planToReadButton, plantToWatchButton, watchingButton, watchedButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,6 +39,12 @@ public class ListsFragment extends Fragment implements View.OnClickListener {
         readingButton.setOnClickListener(this);
         planToReadButton = root.findViewById(R.id.planToReadButton);
         planToReadButton.setOnClickListener(this);
+        plantToWatchButton = root.findViewById(R.id.plantToWatchButton);
+        plantToWatchButton.setOnClickListener(this);
+        watchingButton = root.findViewById(R.id.watchingButton);
+        watchingButton.setOnClickListener(this);
+        watchedButton = root.findViewById(R.id.watchedButton);
+        watchedButton.setOnClickListener(this);
 
         return root;
     }
@@ -55,6 +63,14 @@ public class ListsFragment extends Fragment implements View.OnClickListener {
         if(v ==planToReadButton)
         {
             startActivity(new Intent(getActivity(), PlantToReadActivity.class));
+        }
+        if(v == plantToWatchButton)
+        {
+            startActivity(new Intent(getActivity(), PlanToWatchActivity.class));
+        }
+        if(v == watchingButton)
+        {
+            startActivity(new Intent(getActivity(), WatchingListActivity.class));
         }
     }
 }

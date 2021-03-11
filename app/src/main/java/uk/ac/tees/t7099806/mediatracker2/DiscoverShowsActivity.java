@@ -132,7 +132,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
         }
     }
 
-    private void PutDataIntoRecyclerView(List<MovieInformation> movieInformationeList)
+    private void PutDataIntoRecyclerView(ArrayList<MovieInformation> movieInformationeList)
     {
         MovieAdapter adapter = new MovieAdapter(this, movieInformationeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

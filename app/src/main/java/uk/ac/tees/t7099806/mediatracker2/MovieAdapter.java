@@ -14,15 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private Context context;
-    private List<MovieInformation> movieInformationList;
+    private ArrayList<MovieInformation> movieInformationList;
 
     private String genreString;
-    public MovieAdapter(Context context, List<MovieInformation> movieInformationList)
+    public MovieAdapter(Context context, ArrayList<MovieInformation> movieInformationList)
     {
         this.context = context;
         this.movieInformationList = movieInformationList;
@@ -34,6 +35,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_rv_item, parent, false);
         LayoutInflater inflater;
 
+        System.out.println("adapter");
         return new MovieViewHolder(view);
     }
 
@@ -41,6 +43,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
         final MovieInformation movieInformation = movieInformationList.get(position);
+        System.out.println(movieInformation.getName());
         holder.name.setText(movieInformation.getName());
         holder.release.setText("Release Date: " + movieInformation.getReleaseDate());
         holder.language.setText("Language: " + movieInformation.getLanguage());

@@ -123,6 +123,8 @@
     <string name="title_activity_search_movies">SearchMoviesActivity</string>
     <string name="title_activity_discover_shows">DiscoverShowsActivity</string>
     <string name="title_activity_movie_details_page">MovieDetailsPage</string>
+    <string name="title_activity_plan_to_watch">PlanToWatchActivity</string>
+    <string name="title_activity_watching_list">WatchingListActivity</string>
 
 
 </resources>
