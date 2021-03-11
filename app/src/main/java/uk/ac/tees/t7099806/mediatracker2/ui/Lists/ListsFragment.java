@@ -19,6 +19,7 @@ import uk.ac.tees.t7099806.mediatracker2.PlantToReadActivity;
 import uk.ac.tees.t7099806.mediatracker2.R;
 import uk.ac.tees.t7099806.mediatracker2.ReadListActivity;
 import uk.ac.tees.t7099806.mediatracker2.ReadingListActivity;
+import uk.ac.tees.t7099806.mediatracker2.WatchedActivity;
 import uk.ac.tees.t7099806.mediatracker2.WatchingListActivity;
 
 public class ListsFragment extends Fragment implements View.OnClickListener {
@@ -71,6 +72,10 @@ public class ListsFragment extends Fragment implements View.OnClickListener {
         if(v == watchingButton)
         {
             startActivity(new Intent(getActivity(), WatchingListActivity.class));
+        }
+        if(v == watchedButton)
+        {
+            startActivity(new Intent(getActivity(), WatchedActivity.class));
         }
     }
 }

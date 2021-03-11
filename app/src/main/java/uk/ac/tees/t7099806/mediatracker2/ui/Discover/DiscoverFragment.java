@@ -52,7 +52,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v == discoverBooks || v == discoverBooksText)
         {
-            startActivity(new Intent(getActivity(), DiscoverShowsActivity.class));
+           // startActivity(new Intent(getActivity(), DiscoverShowsActivity.class));
         }
         if(v == discoverShows || v == discoverShowsText)
         {
