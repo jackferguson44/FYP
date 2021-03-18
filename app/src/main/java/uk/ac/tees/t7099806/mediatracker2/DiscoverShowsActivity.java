@@ -44,6 +44,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
 
     private static String JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
     private static String GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
+    private static String GENRE_URL_2 = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
 
     private RequestQueue requestQueue;
     private ArrayList<MovieInformation> moviesInfoArrayList;
@@ -52,8 +53,8 @@ public class DiscoverShowsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
 
-    private ArrayList<MovieInformation> movieGenreArrayList;
-    RecyclerView genreRecyclerView;
+    private ArrayList<MovieInformation> movieGenreArrayList, movieGenreArrayList2;
+    RecyclerView genreRecyclerView, genreRecyclerView2;
 
 
     private DatabaseReference databaseReference;
@@ -61,11 +62,13 @@ public class DiscoverShowsActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference checkGenre;
     private String genre;
+    private String genreTwo;
     private int genreSearch;
 
-    private TextView genreTitle;
+    private TextView genreTitle, genreTitle2;
+    private String adder;
 
-
+    private int i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,31 +81,52 @@ public class DiscoverShowsActivity extends AppCompatActivity {
         genreTitle = findViewById(R.id.genreText);
         genreTitle.setText("Based off Your Lists");
 
+        genreTitle2 = findViewById(R.id.genre2Text);
 
+        i = 0;
         checkGenre = databaseReference.child("users").child(firebaseUser.getUid());
-        Query query =  checkGenre.child("genres").orderByChild("value").limitToLast(1);
+        Query query =  checkGenre.child("genres").orderByChild("value").limitToLast(2);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot : snapshot.getChildren())
                 {
-                    genre = childSnapshot.getKey();
-                    System.out.println("key " + genre);
-                    genreTitle.setText("Genre: " + genre);
-                    setGenre();
-
                     moviesInfoArrayList = new ArrayList<>();
                     recyclerView = findViewById(R.id.popularMovieList);
                     GetPopularMovieData getPopularMovieData = new GetPopularMovieData(JSON_URL, recyclerView, moviesInfoArrayList);
                     getPopularMovieData.execute();
 
-                    movieGenreArrayList = new ArrayList<>();
-                    genreRecyclerView = findViewById(R.id.genre1list);
-                    GetPopularMovieData getPopularMovieData1 = new GetPopularMovieData(GENRE_URL, genreRecyclerView, movieGenreArrayList);
-                    getPopularMovieData1.execute();
+                    if(i == 1)
+                    {
+                        genre = childSnapshot.getKey();
+                        System.out.println("key " + genre);
+                        genreTitle.setText("Genre: " + genre);
+                        setGenre();
+                        movieGenreArrayList = new ArrayList<>();
+                        genreRecyclerView = findViewById(R.id.genre1list);
+                        GetPopularMovieData getPopularMovieData1 = new GetPopularMovieData(GENRE_URL, genreRecyclerView, movieGenreArrayList);
+                        getPopularMovieData1.execute();
+                    }
+                    if(i == 0)
+                    {
+                        genreTwo = childSnapshot.getKey();
+                        System.out.println("genre");
+                        System.out.println("genreTwo : " + genreTwo);
+                        genreTitle2.setText("Genre: " + genreTwo);
+                        setGenre2();
+                        System.out.println("GENRE URL 2" + GENRE_URL_2);
+                        movieGenreArrayList2 = new ArrayList<>();
+                        genreRecyclerView2 = findViewById(R.id.genre2list);
+                        GetPopularMovieData getPopularMovieData2 = new GetPopularMovieData(GENRE_URL_2, genreRecyclerView2, movieGenreArrayList2);
+                        getPopularMovieData2.execute();
+                    }
+
 
                     JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
                     GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
+                    GENRE_URL_2 = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
+
+                    i++;
                 }
             }
 
@@ -180,6 +204,71 @@ public class DiscoverShowsActivity extends AppCompatActivity {
             System.out.println("Genre url: " + GENRE_URL);
 
         }
+
+    private void setGenre2()
+    {
+        switch(genreTwo)
+        {
+            case "Action":
+                genreSearch = 28;
+                break;
+            case "Adventure":
+                genreSearch = 12;
+                break;
+            case "Animation":
+                genreSearch = 16;
+                break;
+            case "Comedy":
+                genreSearch = 35;
+                break;
+            case "Crime":
+                genreSearch = 80;
+                break;
+            case "Documentary":
+                genreSearch = 99;
+                break;
+            case "Drama":
+                genreSearch = 18;
+                break;
+            case "Family":
+                genreSearch = 10751;
+                break;
+            case "Fantasy":
+                genreSearch = 14;
+                break;
+            case "History":
+                genreSearch = 36;
+                break;
+            case "Horror":
+                genreSearch = 27;
+                break;
+            case "Music":
+                genreSearch = 10402;
+                break;
+            case "Science Fiction":
+                genreSearch = 878;
+                break;
+            case "TV Movie":
+                genreSearch = 10770;
+                break;
+            case "Thriller":
+                genreSearch = 53;
+                break;
+            case "War":
+                genreSearch = 10752;
+                break;
+            case "Western":
+                genreSearch = 37;
+            case "null":
+                genreSearch = 0;
+
+        }
+
+        System.out.println("genre search= " + genreSearch);
+        String str = String.valueOf(genreSearch);
+        GENRE_URL_2 = GENRE_URL_2 + str;
+        System.out.println("Genre url: " + GENRE_URL_2);
+    }
 
     public class GetPopularMovieData extends AsyncTask<String, String, String>
     {
