@@ -42,7 +42,6 @@ import java.util.List;
 
 public class DiscoverShowsActivity extends AppCompatActivity {
 
-
     private static String JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
     private static String GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
 
@@ -89,6 +88,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
                 {
                     genre = childSnapshot.getKey();
                     System.out.println("key " + genre);
+                    genreTitle.setText("Genre: " + genre);
                     setGenre();
 
                     moviesInfoArrayList = new ArrayList<>();
@@ -101,91 +101,85 @@ public class DiscoverShowsActivity extends AppCompatActivity {
                     GetPopularMovieData getPopularMovieData1 = new GetPopularMovieData(GENRE_URL, genreRecyclerView, movieGenreArrayList);
                     getPopularMovieData1.execute();
 
-
+                    JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
+                    GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
+                    throw error.toException(); }
         });
 
 
-
-
-
-
-
-
-    }
-
-
-    private void setGenre()
-    {
-        switch(genre)
-        {
-            case "Action":
-                genreSearch = 28;
-                break;
-            case "Adventure":
-                genreSearch = 12;
-                break;
-            case "Animation":
-                genreSearch = 16;
-                break;
-            case "Comedy":
-                genreSearch = 35;
-                break;
-            case "Crime":
-                genreSearch = 80;
-                break;
-            case "Documentary":
-                genreSearch = 99;
-                break;
-            case "Drama":
-                genreSearch = 18;
-                break;
-            case "Family":
-                genreSearch = 10751;
-                break;
-            case "Fantasy":
-                genreSearch = 14;
-                break;
-            case "History":
-                genreSearch = 36;
-                break;
-            case "Horror":
-                genreSearch = 27;
-                break;
-            case "Music":
-                genreSearch = 10402;
-                break;
-            case "Science Fiction":
-                genreSearch = 878;
-                break;
-            case "TV Movie":
-                genreSearch = 10770;
-                break;
-            case "Thriller":
-                genreSearch = 53;
-                break;
-            case "War":
-                genreSearch = 10752;
-                break;
-            case "Western":
-                genreSearch = 37;
-            case "null":
-                genreSearch = 0;
-
         }
 
-        System.out.println("genre search= " + genreSearch);
-        String str = String.valueOf(genreSearch);
-        GENRE_URL = GENRE_URL + str;
-        System.out.println("Genre url: " + GENRE_URL);
 
-    }
+        private void setGenre()
+        {
+            switch(genre)
+            {
+                case "Action":
+                    genreSearch = 28;
+                    break;
+                case "Adventure":
+                    genreSearch = 12;
+                    break;
+                case "Animation":
+                    genreSearch = 16;
+                    break;
+                case "Comedy":
+                    genreSearch = 35;
+                    break;
+                case "Crime":
+                    genreSearch = 80;
+                    break;
+                case "Documentary":
+                    genreSearch = 99;
+                    break;
+                case "Drama":
+                    genreSearch = 18;
+                    break;
+                case "Family":
+                    genreSearch = 10751;
+                    break;
+                case "Fantasy":
+                    genreSearch = 14;
+                    break;
+                case "History":
+                    genreSearch = 36;
+                    break;
+                case "Horror":
+                    genreSearch = 27;
+                    break;
+                case "Music":
+                    genreSearch = 10402;
+                    break;
+                case "Science Fiction":
+                    genreSearch = 878;
+                    break;
+                case "TV Movie":
+                    genreSearch = 10770;
+                    break;
+                case "Thriller":
+                    genreSearch = 53;
+                    break;
+                case "War":
+                    genreSearch = 10752;
+                    break;
+                case "Western":
+                    genreSearch = 37;
+                case "null":
+                    genreSearch = 0;
+
+            }
+
+            System.out.println("genre search= " + genreSearch);
+            String str = String.valueOf(genreSearch);
+            GENRE_URL = GENRE_URL + str;
+            System.out.println("Genre url: " + GENRE_URL);
+
+        }
 
     public class GetPopularMovieData extends AsyncTask<String, String, String>
     {

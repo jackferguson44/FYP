@@ -292,13 +292,29 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-    private void setListAvgRating(DataSnapshot snapshot)
+    private void setListAvgRating(final DataSnapshot snapshot)
     {
         if(listExist == true)
         {
-            listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
-            avgListRatingSet = decimalFormat.format(listS);
-            ratingTV.setText("Your rating: " + avgListRatingSet);
+            DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey);
+            checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshotI) {
+                    if(snapshotI.child("Rating").exists())
+                    {
+                        listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
+                        avgListRatingSet = decimalFormat.format(listS);
+                        ratingTV.setText("Your rating: " + avgListRatingSet);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
         }
     }
 
@@ -533,7 +549,16 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                         databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
                     }
                     toastMaker("not exist to add");
-                    genreAdd();
+
+                    if(category.equals(null) || category.equals(""))
+                    {
+                        System.out.println("null category");
+                    }
+                    else
+                    {
+                        genreAdd();
+                    }
+                   // genreAdd();
                 }
             }
 
@@ -553,59 +578,63 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         final DatabaseReference checkrRefI = checkRef.child("bookGenres");
         final boolean[] checker = new boolean[1];
 
-        checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("bookGenres").exists())
-                {
-                    checker[0] = true;
-                    System.out.println("should be first");
-                }
-                else
-                {
-                    checker[0] = false;
-                    checkRef.child("bookGenres").child(category).child("value").setValue("1");
-                }
 
-                if(checker[0] == true) {
-                    System.out.println("should be second");
-                    checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.child(category).exists()) {
 
-                                System.out.println(category);
-                                String genreS = snapshot.child(category).child("value").getValue().toString();
-                                int genreInt = Integer.parseInt(genreS);
-                                genreInt++;
-                                System.out.println("genreint " + genreInt);
-                                checkRef.child("bookGenres").child(category).child("value").setValue(genreInt);
+            checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.child("bookGenres").exists())
+                    {
+                        checker[0] = true;
+                        System.out.println("should be first");
+                    }
+                    else
+                    {
+                        checker[0] = false;
+                        checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                    }
+
+                    if(checker[0] == true) {
+                        System.out.println("should be second");
+                        checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.child(category).exists()) {
+
+                                    System.out.println(category);
+                                    String genreS = snapshot.child(category).child("value").getValue().toString();
+                                    int genreInt = Integer.parseInt(genreS);
+                                    genreInt++;
+                                    System.out.println("genreint " + genreInt);
+                                    checkRef.child("bookGenres").child(category).child("value").setValue(genreInt);
+                                }
+                                else
+                                {
+                                    checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                                }
                             }
-                            else
-                            {
-                                checkRef.child("bookGenres").child(category).child("value").setValue("1");
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
+                    }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
 
 
 
-        });
-    }
+            });
+        }
+
+
 
 
 

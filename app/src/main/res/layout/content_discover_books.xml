@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Search Books"
+            android:text="Discover Books"
             android:textColor="@color/colorPrimary"
             android:textSize="32sp"
             android:layout_gravity="center"

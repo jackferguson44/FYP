@@ -10,7 +10,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,12 +44,51 @@ public class DiscoverBooksActivity extends AppCompatActivity {
     private Button searchBtn;
     private String urlGet;
 
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference checkGenre;
+    private String genre;
+    private int genreSearch;
+    private String genreEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover_books);
 
-        getBookInfo();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        checkGenre = databaseReference.child("users").child(firebaseUser.getUid());
+        Query query =  checkGenre.child("bookGenres").orderByChild("value").limitToLast(1);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot childSnapshot : snapshot.getChildren())
+                {
+                    genre = childSnapshot.getKey();
+                    System.out.println("key " + genre);
+
+                    genre.replaceAll(" ", "+");
+
+                    getBookInfo();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+       // getBookInfo();
     }
 
     private void getBookInfo()
@@ -54,8 +102,8 @@ public class DiscoverBooksActivity extends AppCompatActivity {
         requestQueue.getCache().clear();
 
 
-        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel";
-        urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel";
+        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:" + genre;
+        urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel" + genre;
 
         RequestQueue queue = Volley.newRequestQueue(DiscoverBooksActivity.this);
 

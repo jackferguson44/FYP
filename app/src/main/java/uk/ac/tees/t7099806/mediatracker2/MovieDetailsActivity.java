@@ -351,7 +351,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 else
                 {
                     checker[0] = false;
-                    checkRef.child("genres").child(genre).child("value").setValue("1");
+                    checkRef.child("genres").child(genre).child("value").setValue(1);
                 }
 
                 if(checker[0] == true) {
@@ -370,7 +370,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                             }
                             else
                             {
-                                checkRef.child("genres").child(genre).child("value").setValue("1");
+                                checkRef.child("genres").child(genre).child("value").setValue(1);
                             }
                         }
 

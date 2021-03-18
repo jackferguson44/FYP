@@ -56,6 +56,7 @@ public class SearchBooksActivity extends AppCompatActivity{
 
     private void getBooksInfo(String query) {
 
+        query.replaceAll(" ", "+");
 
         bookInfoArrayList = new ArrayList<>();
 
