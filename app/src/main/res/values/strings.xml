@@ -127,6 +127,7 @@
     <string name="title_activity_watching_list">WatchingListActivity</string>
     <string name="title_activity_watched">WatchedActivity</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_discover_books">DiscoverBooksActivity</string>
 
 
 </resources>

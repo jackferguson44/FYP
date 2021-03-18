@@ -8,8 +8,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,8 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchBooksActivity extends AppCompatActivity{
-
+public class DiscoverBooksActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
     private ArrayList<BookInformation> bookInfoArrayList;
@@ -36,41 +38,26 @@ public class SearchBooksActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_books);
+        setContentView(R.layout.activity_discover_books);
 
-        searchEdt = findViewById(R.id.editSearchBooks);
-        searchBtn = findViewById(R.id.searchBooksButton);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if (searchEdt.getText().toString().isEmpty()) {
-                    searchEdt.setError("Please enter search query");
-                    return;
-                }
-                getBooksInfo(searchEdt.getText().toString());
-            }
-        });
+        getBookInfo();
     }
 
-    private void getBooksInfo(String query) {
-
-
+    private void getBookInfo()
+    {
         bookInfoArrayList = new ArrayList<>();
 
 
-        requestQueue = Volley.newRequestQueue(SearchBooksActivity.this);
+        requestQueue = Volley.newRequestQueue(DiscoverBooksActivity.this);
 
 
         requestQueue.getCache().clear();
 
-        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=" + query;
-        urlGet = "https://www.googleapis.com/books/v1/volumes?q=" + query ;
 
-        RequestQueue queue = Volley.newRequestQueue(SearchBooksActivity.this);
+        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel";
+        urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel";
 
-        final String[] category = new String[1];
+        RequestQueue queue = Volley.newRequestQueue(DiscoverBooksActivity.this);
 
         JsonObjectRequest booksObjrequest = new JsonObjectRequest(Request.Method.GET, urlI, null, new Response.Listener<JSONObject>() {
             @Override
@@ -95,41 +82,37 @@ public class SearchBooksActivity extends AppCompatActivity{
                         String previewLink = volumeObj.optString("previewLink");
                         JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
                         String buyLink = saleInfoObj.optString("buyLink");
-                        if(volumeObj.has("categories"))
-                        {
-                            JSONArray categoryArray = volumeObj.getJSONArray("categories");
-                            ArrayList<String> categoryArrayList = new ArrayList<>();
-                            if(categoryArray.length() != 0)
-                            {
-                                for(int j = 0; j < categoryArray.length(); j++)
-                                {
-                                    categoryArrayList.add(categoryArray.optString(i));
-                                }
-                            }
-                            category[0] = categoryArrayList.get(0);
-                            System.out.println("category:  " + category[0]);
-                        }
+                        //  JSONArray categoryArray = volumeObj.getJSONArray("categories");
                         ArrayList<String> authorsArrayList = new ArrayList<>();
                         if (authorsArray.length() != 0) {
                             for (int j = 0; j < authorsArray.length(); j++) {
                                 authorsArrayList.add(authorsArray.optString(i));
                             }
                         }
-
+//                        ArrayList<String> categoryArrayList = new ArrayList<>();
+//                        if(categoryArray.length() != 0)
+//                        {
+//                            for(int j = 0; j < categoryArray.length(); j++)
+//                            {
+//                                categoryArrayList.add(categoryArray.optString(i));
+//                            }
+//                        }
+//                        String category = categoryArrayList.get(0);
+//                        System.out.println("category:  " + category);
 
 
                         AddS addS = new AddS(thumbnail);
                         String thumbnailS = addS.add();
-                        BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnailS, previewLink, category[0]);
+                        BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnailS, previewLink, "category");
 
 
                         bookInfoArrayList.add(bookInfo);
 
-                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, SearchBooksActivity.this);
+                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, DiscoverBooksActivity.this);
 
 
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchBooksActivity.this, RecyclerView.VERTICAL, false);
-                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.bookList);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DiscoverBooksActivity.this, RecyclerView.VERTICAL, false);
+                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.bookDiscoverList);
 
 
                         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -138,14 +121,14 @@ public class SearchBooksActivity extends AppCompatActivity{
                 } catch (JSONException e) {
                     e.printStackTrace();
 
-                    Toast.makeText(SearchBooksActivity.this, "No Data Found" + e, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiscoverBooksActivity.this, "No Data Found" + e, Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(SearchBooksActivity.this, "Error found is " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(DiscoverBooksActivity.this, "Error found is " + error, Toast.LENGTH_SHORT).show();
             }
         });
 

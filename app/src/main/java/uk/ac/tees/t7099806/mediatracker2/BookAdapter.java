@@ -59,6 +59,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 i.putExtra("pageCount", bookInfo.getPageCount());
                 i.putExtra("thumbnail", bookInfo.getThumbnail());
                 i.putExtra("previewLink", bookInfo.getPreviewLink());
+                i.putExtra("subject", bookInfo.getCategory());
 
                 mcontext.startActivity(i);
             }

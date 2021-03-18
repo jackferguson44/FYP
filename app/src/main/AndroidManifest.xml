@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DiscoverBooksActivity"
+            android:label="@string/title_activity_discover_books"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".SplashScreenActivity"
             android:label="@string/title_activity_splash_screen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -81,8 +85,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

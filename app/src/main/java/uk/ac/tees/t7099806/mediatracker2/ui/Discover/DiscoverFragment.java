@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import uk.ac.tees.t7099806.mediatracker2.DiscoverBooksActivity;
 import uk.ac.tees.t7099806.mediatracker2.DiscoverShowsActivity;
 import uk.ac.tees.t7099806.mediatracker2.R;
 
@@ -52,7 +53,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v == discoverBooks || v == discoverBooksText)
         {
-           // startActivity(new Intent(getActivity(), DiscoverShowsActivity.class));
+            startActivity(new Intent(getActivity(), DiscoverBooksActivity.class));
         }
         if(v == discoverShows || v == discoverShowsText)
         {

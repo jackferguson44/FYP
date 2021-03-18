@@ -13,10 +13,11 @@ public class BookInformation {
     private int pageCount;
     private String thumbnail;
     private String previewLink;
+    private String category;
 
     public BookInformation(String title, String subtitle, ArrayList<String> authors, String publisher,
                            String publishedDate, String description, int pageCount, String thumbnail,
-                           String previewLink) {
+                           String previewLink, String category) {
         this.title = title;
         this.subtitle = subtitle;
         this.authors = authors;
@@ -26,6 +27,7 @@ public class BookInformation {
         this.pageCount = pageCount;
         this.thumbnail = thumbnail;
         this.previewLink = previewLink;
+        this.category = category;
     }
 
     public String getTitle() {
@@ -98,5 +100,13 @@ public class BookInformation {
 
     public void setPreviewLink(String previewLink) {
         this.previewLink = previewLink;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

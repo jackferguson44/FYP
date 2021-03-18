@@ -56,7 +56,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private String[] bookParent;
 
 
-    private String title, subtitle, publisher, publishedDate, description, thumbnail;
+    private String title, subtitle, publisher, publishedDate, description, thumbnail, category;
     private int pageCount;
     private ArrayList<String> authors;
 
@@ -138,6 +138,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         description = getIntent().getStringExtra("description");
         pageCount = getIntent().getIntExtra("pageCount", 0);
         thumbnail = getIntent().getStringExtra("thumbnail");
+        category = getIntent().getStringExtra("subject");
+        System.out.println(category);
 
         titleTV.setText(title);
         subtitleTV.setText(subtitle);
@@ -531,6 +533,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                         databaseReference.child("users").child(firebaseUser.getUid()).child("booksRead").setValue(amount);
                     }
                     toastMaker("not exist to add");
+                    genreAdd();
                 }
             }
 
@@ -541,6 +544,67 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
+    }
+
+    private void genreAdd()
+    {
+        System.out.println("category " + category);
+        final DatabaseReference checkRef = databaseReference.child("users").child(firebaseUser.getUid());
+        final DatabaseReference checkrRefI = checkRef.child("bookGenres");
+        final boolean[] checker = new boolean[1];
+
+        checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("bookGenres").exists())
+                {
+                    checker[0] = true;
+                    System.out.println("should be first");
+                }
+                else
+                {
+                    checker[0] = false;
+                    checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                }
+
+                if(checker[0] == true) {
+                    System.out.println("should be second");
+                    checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.child(category).exists()) {
+
+                                System.out.println(category);
+                                String genreS = snapshot.child(category).child("value").getValue().toString();
+                                int genreInt = Integer.parseInt(genreS);
+                                genreInt++;
+                                System.out.println("genreint " + genreInt);
+                                checkRef.child("bookGenres").child(category).child("value").setValue(genreInt);
+                            }
+                            else
+                            {
+                                checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+
+
+        });
     }
 
 
