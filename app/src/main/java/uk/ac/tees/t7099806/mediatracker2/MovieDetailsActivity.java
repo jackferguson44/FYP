@@ -320,6 +320,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                         databaseReference.child("users").child(firebaseUser.getUid()).child("showsWatched").setValue(amount);
                     }
                     toastMaker("not exist to add");
+                    genreAdd();
                 }
             }
 
@@ -328,6 +329,75 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
             }
         });
+
+
+    }
+
+
+    private void genreAdd()
+    {
+        final DatabaseReference checkRef = databaseReference.child("users").child(firebaseUser.getUid());
+        final DatabaseReference checkrRefI = checkRef.child("genres");
+        final boolean[] checker = new boolean[1];
+
+        checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("genres").exists())
+                {
+                    checker[0] = true;
+                    System.out.println("should be first");
+                }
+                else
+                {
+                    checker[0] = false;
+                    checkRef.child("genres").child(genre).setValue("0");
+                }
+
+                if(checker[0] == true) {
+                    System.out.println("should be second");
+                    checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.child(genre).exists()) {
+
+                                System.out.println(genre);
+                                String genreS = snapshot.child(genre).getValue().toString();
+                                int genreInt = Integer.parseInt(genreS);
+                                genreInt++;
+                                System.out.println("genreint " + genreInt);
+                                checkRef.child("genres").child(genre).setValue(genreInt);
+                            }
+                            else
+                            {
+                                checkRef.child("genres").child(genre).setValue("0");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+
+
+        });
+
+
+
+
+
+        //checkrRefI.orderByChild("gen")
 
 
     }
@@ -432,7 +502,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                                 if(data.child("Rating").exists())
                                 {
 
-                                    System.out.println("Rating exists");
                                 }
                                 else
                                 {
@@ -709,10 +778,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     private void setMovieAvgRating(DataSnapshot snapshot)
     {
-        System.out.println("movieExists doesn't exist");
+
         if(movieExists == true)
         {
-            System.out.println("Movie rating: "  + snapshot.child("shows").child(movieKey).child("rating").getValue().toString());
+
             movieS = Float.parseFloat(snapshot.child("shows").child(movieKey).child("rating").getValue().toString());
             avgMovieRatingSet = decimalFormat.format(movieS);
             avgRatingTV.setText("Average rating: " + avgMovieRatingSet);

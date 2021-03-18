@@ -13,15 +13,7 @@
         android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/popularText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Popular Shows/Movies"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="@color/colorPrimary"
-        />
+
 
         ></LinearLayout>
 
@@ -32,11 +24,37 @@
         android:orientation="vertical"
         android:layout_below="@+id/topLin">
 
+        <TextView
+            android:id="@+id/popularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Popular Shows/Movies"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimary"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popularMovieList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
+            />
+
+        <TextView
+            android:id="@+id/genreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Genre"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/genre1list"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             />
 
     </LinearLayout>
