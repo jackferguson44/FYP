@@ -351,7 +351,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 else
                 {
                     checker[0] = false;
-                    checkRef.child("genres").child(genre).setValue("0");
+                    checkRef.child("genres").child(genre).child("value").setValue("1");
                 }
 
                 if(checker[0] == true) {
@@ -362,15 +362,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                             if (snapshot.child(genre).exists()) {
 
                                 System.out.println(genre);
-                                String genreS = snapshot.child(genre).getValue().toString();
+                                String genreS = snapshot.child(genre).child("value").getValue().toString();
                                 int genreInt = Integer.parseInt(genreS);
                                 genreInt++;
                                 System.out.println("genreint " + genreInt);
-                                checkRef.child("genres").child(genre).setValue(genreInt);
+                                checkRef.child("genres").child(genre).child("value").setValue(genreInt);
                             }
                             else
                             {
-                                checkRef.child("genres").child(genre).setValue("0");
+                                checkRef.child("genres").child(genre).child("value").setValue("1");
                             }
                         }
 
