@@ -123,6 +123,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 //        buttonAddToList.setOnClickListener(this);
 
 
+
+
         spinner = (Spinner) findViewById(R.id.spinnerAddToList);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(BookDetailsActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.spinner_list));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -139,7 +141,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         pageCount = getIntent().getIntExtra("pageCount", 0);
         thumbnail = getIntent().getStringExtra("thumbnail");
         category = getIntent().getStringExtra("subject");
-        System.out.println(category);
 
         titleTV.setText(title);
         subtitleTV.setText(subtitle);
@@ -284,7 +285,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     {
         if(bookExists == true)
         {
-            System.out.println("book rating: "  + snapshot.child("books").child(bookKey).child("rating").getValue().toString());
             bookS = Float.parseFloat(snapshot.child("books").child(bookKey).child("rating").getValue().toString());
             avgBookRatingSet = decimalFormat.format(bookS);
             avgRatingTV.setText("Average rating: " + avgBookRatingSet);
@@ -323,7 +323,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         for(DataSnapshot ds : snapshot.getChildren())
         {
             listKey = ds.getKey();
-            System.out.println("list key: " + listKey);
             if(ds.exists())
             {
                 listExist = true;
@@ -426,47 +425,23 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-        final Query query = checkRef.orderByChild("bookImage");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String myParent = snapshot.getKey();
-                parent[0] = myParent;
-                for(DataSnapshot child: snapshot.getChildren())
-                {
-                    String key = child.getKey().toString();
-                    String value = child.getValue().toString();
-                }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String parentI = "";
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    parentI = dataSnapshot.getKey();
+                }
+
                 if(snapshot.exists())
                 {
                     setButtonToAdd();
-                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
+                    System.out.println("parent = " + parentI);
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parentI).removeValue();
                     if(spinValue == "read list")
                     {
 
@@ -552,7 +527,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
                     if(category.equals(null) || category.equals(""))
                     {
-                        System.out.println("null category");
+
                     }
                     else
                     {
@@ -573,7 +548,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void genreAdd()
     {
-        System.out.println("category " + category);
         final DatabaseReference checkRef = databaseReference.child("users").child(firebaseUser.getUid());
         final DatabaseReference checkrRefI = checkRef.child("bookGenres");
         final boolean[] checker = new boolean[1];
@@ -586,7 +560,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     if(snapshot.child("bookGenres").exists())
                     {
                         checker[0] = true;
-                        System.out.println("should be first");
                     }
                     else
                     {
@@ -595,17 +568,14 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     }
 
                     if(checker[0] == true) {
-                        System.out.println("should be second");
                         checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.child(category).exists()) {
 
-                                    System.out.println(category);
                                     String genreS = snapshot.child(category).child("value").getValue().toString();
                                     int genreInt = Integer.parseInt(genreS);
                                     genreInt++;
-                                    System.out.println("genreint " + genreInt);
                                     checkRef.child("bookGenres").child(category).child("value").setValue(genreInt);
                                 }
                                 else
@@ -703,11 +673,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                                 if(data.child("Rating").exists())
                                 {
 
-                                    System.out.println("Rating exists");
                                 }
                                 else
                                 {
-                                    System.out.println("Rating dont exist");
+
                                 }
                             }
                         }

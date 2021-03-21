@@ -58,6 +58,9 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
 
         Picasso.get().load(bookInfo.getBookImage()).into(holder.bookIV);
 
+        String numPage = bookInfo.getNumberOfPages();
+        final int numPageI = Integer.parseInt(numPage);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +71,9 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                 i.putExtra("publisher", bookInfo.getPublisher());
                 i.putExtra("publishedDate", bookInfo.getPublishDate());
                 i.putExtra("description", bookInfo.getDescription());
-                i.putExtra("pageCount", bookInfo.getNumberOfPages());
+                i.putExtra("pageCount", numPageI);
+                System.out.println("should show num:" + bookInfo.getNumberOfPages());
+                System.out.println(bookInfo.getTitle());
                 i.putExtra("thumbnail", bookInfo.getBookImage());
                 i.putExtra("previewLink", "lol");
                 context.startActivity(i);

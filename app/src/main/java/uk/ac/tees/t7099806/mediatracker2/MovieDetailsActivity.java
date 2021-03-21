@@ -1,5 +1,6 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -80,8 +81,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     private boolean listExist;
     private String avgListRatingSet;
     private float listS;
-
-
+    private boolean ratingMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -409,54 +409,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
 
-        final Query query = checkRef.orderByChild("image");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String myParent = snapshot.getKey();
-                parent[0] = myParent;
-                for(DataSnapshot child: snapshot.getChildren())
-                {
-                    String key = child.getKey().toString();
-                    String value = child.getValue().toString();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String parentI = "";
+
+                for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    parentI = dataSnapshot.getKey();
+                }
                 if(snapshot.exists())
                 {
+                    ratingMethods = false;
                     setButtonToAdd();
-                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parent[0]).removeValue();
+                    databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parentI).removeValue();
                     if(spinValue == "watched list")
                     {
 
                         int amount = Integer.parseInt(increaseWatched);
                         amount = amount-1;
                         databaseReference.child("users").child(firebaseUser.getUid()).child("showsWatched").setValue(amount);
-
 
                     }
                 }
@@ -789,13 +762,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
-    private void setListAvgRating(DataSnapshot snapshot)
+    private void setListAvgRating(final DataSnapshot snapshot)
     {
         if(listExist == true)
         {
-            listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
-            avgListRatingSet = decimalFormat.format(listS);
-            yourRatingTV.setText("Your rating: " + avgListRatingSet);
+            DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey);
+            checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshotI) {
+                    if(snapshotI.child("Rating").exists())
+                    {
+                        listS = Float.parseFloat(snapshot.child("lists").child(firebaseUser.getUid()).child(spinValue).child(listKey).child("Rating").getValue().toString());
+                        avgListRatingSet = decimalFormat.format(listS);
+                        yourRatingTV.setText("Your rating: " + avgListRatingSet);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
     }
 }
