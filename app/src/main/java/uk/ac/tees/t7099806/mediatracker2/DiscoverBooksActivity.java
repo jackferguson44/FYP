@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -39,18 +40,21 @@ import java.util.ArrayList;
 public class DiscoverBooksActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private ArrayList<BookInformation> bookInfoArrayList;
+    private ArrayList<BookInformation> bookInfoArrayList, bookInfoArrayList2, bookInfoArrayList3;
     private EditText searchEdt;
     private Button searchBtn;
     private String urlGet;
+    private TextView discoverText, discoverText2, discoverText3;
+    RecyclerView mRecyclerView, mRecyclerView2, mRecyclerView3;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private DatabaseReference checkGenre;
-    private String genre;
+    private String genre, genre2, genre3;
     private int genreSearch;
     private String genreEdit;
+    int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +66,63 @@ public class DiscoverBooksActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = firebaseAuth.getCurrentUser();
 
+        discoverText = findViewById(R.id.discoverBookText);
+        discoverText2 = findViewById(R.id.discoverBookText2);
+        discoverText3 = findViewById(R.id.discoverBookText3);
+
         checkGenre = databaseReference.child("users").child(firebaseUser.getUid());
-        Query query =  checkGenre.child("bookGenres").orderByChild("value").limitToLast(1);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.bookDiscoverList);
+        mRecyclerView2 = (RecyclerView) findViewById(R.id.bookDiscoverList2);
+        mRecyclerView3 = (RecyclerView) findViewById(R.id.bookDiscoverList3);
+
+        bookInfoArrayList = new ArrayList<>();
+        bookInfoArrayList2 = new ArrayList<>();
+        bookInfoArrayList3 = new ArrayList<>();
+
+        i = 0;
+        Query query =  checkGenre.child("bookGenres").orderByChild("value").limitToLast(3);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot : snapshot.getChildren())
                 {
-                    genre = childSnapshot.getKey();
-                    System.out.println("key " + genre);
 
-                    genre.replaceAll(" ", "+");
+                    if(i == 2)
+                    {
+                        genre = childSnapshot.getKey();
+                        System.out.println("key " + genre);
 
-                    getBookInfo();
+                        genre.replaceAll(" ", "+");
+                        discoverText.setText("Discover: " + genre);
+
+
+                        getBookInfo(mRecyclerView, genre, bookInfoArrayList);
+                    }
+                    if(i == 1)
+                    {
+                        genre2 = childSnapshot.getKey();
+                        System.out.println("key2  " + genre2);
+
+                        genre2.replaceAll(" ", "+");
+                        discoverText2.setText("Discover: " + genre2);
+
+                        getBookInfo(mRecyclerView2, genre2, bookInfoArrayList2);
+                    }
+                    if(i == 0)
+                    {
+                        genre3 = childSnapshot.getKey();
+                        System.out.println("key2  " + genre2);
+
+                        genre3.replaceAll(" ", "+");
+                        discoverText3.setText("Discover: " + genre3);
+
+                        getBookInfo(mRecyclerView3, genre3, bookInfoArrayList3);
+                    }
+
+
+                    i++;
+
 
                 }
             }
@@ -91,9 +139,9 @@ public class DiscoverBooksActivity extends AppCompatActivity {
        // getBookInfo();
     }
 
-    private void getBookInfo()
+    private void getBookInfo(final RecyclerView recView, String genreI, final ArrayList<BookInformation> bookInformations)
     {
-        bookInfoArrayList = new ArrayList<>();
+
 
 
         requestQueue = Volley.newRequestQueue(DiscoverBooksActivity.this);
@@ -102,8 +150,8 @@ public class DiscoverBooksActivity extends AppCompatActivity {
         requestQueue.getCache().clear();
 
 
-        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:" + genre;
-        urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel" + genre;
+        final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:" + genreI;
+       // urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel" + genreI;
 
         RequestQueue queue = Volley.newRequestQueue(DiscoverBooksActivity.this);
 
@@ -116,8 +164,6 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                     for (int i = 0; i < itemsArray.length(); i++) {
                         JSONObject itemsObj = itemsArray.getJSONObject(i);
                         JSONObject volumeObj = itemsObj.getJSONObject("volumeInfo");
-                        //JSONObject selfLinkObj = itemsObj.getJSONObject("selfLink");
-                        //String selfLink = itemsObj.optString("selfLink");
                         String title = volumeObj.optString("title");
                         String subtitle = volumeObj.optString("subtitle");
                         JSONArray authorsArray = volumeObj.getJSONArray("authors");
@@ -154,17 +200,17 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnailS, previewLink, "category");
 
 
-                        bookInfoArrayList.add(bookInfo);
+                        bookInformations.add(bookInfo);
 
-                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, DiscoverBooksActivity.this);
-
-
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DiscoverBooksActivity.this, RecyclerView.VERTICAL, false);
-                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.bookDiscoverList);
+                        BookAdapter adapter = new BookAdapter(bookInformations, DiscoverBooksActivity.this);
 
 
-                        mRecyclerView.setLayoutManager(linearLayoutManager);
-                        mRecyclerView.setAdapter(adapter);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DiscoverBooksActivity.this, RecyclerView.HORIZONTAL, false);
+
+
+
+                        recView.setLayoutManager(linearLayoutManager);
+                        recView.setAdapter(adapter);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

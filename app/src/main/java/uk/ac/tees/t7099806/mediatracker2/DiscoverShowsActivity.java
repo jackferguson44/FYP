@@ -122,6 +122,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
                     }
 
 
+
                     JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
                     GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
                     GENRE_URL_2 = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";

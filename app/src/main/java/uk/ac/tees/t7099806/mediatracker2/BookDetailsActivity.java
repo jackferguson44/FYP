@@ -591,7 +591,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     else
                     {
                         checker[0] = false;
-                        checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                        checkRef.child("bookGenres").child(category).child("value").setValue(1);
                     }
 
                     if(checker[0] == true) {
@@ -610,7 +610,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                                 }
                                 else
                                 {
-                                    checkRef.child("bookGenres").child(category).child("value").setValue("1");
+                                    checkRef.child("bookGenres").child(category).child("value").setValue(1);
                                 }
                             }
 

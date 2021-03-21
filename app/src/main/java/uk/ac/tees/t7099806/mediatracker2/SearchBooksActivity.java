@@ -82,8 +82,6 @@ public class SearchBooksActivity extends AppCompatActivity{
                     for (int i = 0; i < itemsArray.length(); i++) {
                         JSONObject itemsObj = itemsArray.getJSONObject(i);
                         JSONObject volumeObj = itemsObj.getJSONObject("volumeInfo");
-                        //JSONObject selfLinkObj = itemsObj.getJSONObject("selfLink");
-                        //String selfLink = itemsObj.optString("selfLink");
                         String title = volumeObj.optString("title");
                         String subtitle = volumeObj.optString("subtitle");
                         JSONArray authorsArray = volumeObj.getJSONArray("authors");
@@ -92,10 +90,18 @@ public class SearchBooksActivity extends AppCompatActivity{
                         String description = volumeObj.optString("description");
                         int pageCount = volumeObj.optInt("pageCount");
                         JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
-                        String thumbnail = imageLinks.optString("thumbnail");
+                        String thumbnail;
+                        if(volumeObj.has("imageLinks"))
+                        {
+                            thumbnail = imageLinks.optString("thumbnail");
+                        }
+                        else
+                        {
+                            thumbnail = "https://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api";
+                        }
                         String previewLink = volumeObj.optString("previewLink");
-                        JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
-                        String buyLink = saleInfoObj.optString("buyLink");
+                        //JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
+                        //String buyLink = saleInfoObj.optString("buyLink");
                         if(volumeObj.has("categories"))
                         {
                             JSONArray categoryArray = volumeObj.getJSONArray("categories");
