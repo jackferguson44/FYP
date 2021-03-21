@@ -31,7 +31,7 @@
                 android:padding="3dp"
                 android:text="Book Title"
                 android:textColor="@color/colorPrimary"
-                android:textSize="11sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/publisher"

@@ -104,7 +104,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         titleTV = findViewById(R.id.TVTitle);
         subtitleTV = findViewById(R.id.TVSubTitle);
-        publisherTV = findViewById(R.id.TVpublisher);
+        publisherTV = findViewById(R.id.TVPublisher);
         descTV = findViewById(R.id.TVDescription);
         pageTV = findViewById(R.id.TVNoOfPages);
         publishDateTV = findViewById(R.id.TVPublishDate);
@@ -145,9 +145,9 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         titleTV.setText(title);
         subtitleTV.setText(subtitle);
         publisherTV.setText(publisher);
-        publishDateTV.setText("Published On : " + publishedDate);
+        publishDateTV.setText("Publish Date : " + publishedDate);
         descTV.setText(description);
-        pageTV.setText("No Of Pages : " + pageCount);
+        pageTV.setText("Page Count: " + pageCount);
 
         Picasso.get().load(thumbnail).into(bookIV);
 
@@ -364,6 +364,35 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             spinValue = "reading list";
             changeButton("reading list");
         }
+        listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+        listQuery = listRef.orderByChild("image").equalTo(thumbnail);
+        ValueEventListener valueEventListener1 = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                getListId(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        listQuery.addListenerForSingleValueEvent(valueEventListener1);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                setBookAvgRating(snapshot);
+                setListAvgRating(snapshot);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 

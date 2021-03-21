@@ -31,13 +31,22 @@
 
                 <!--Text view for displaying book publisher-->
                 <TextView
-                    android:id="@+id/TVpublisher"
+                    android:id="@+id/TVTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
                     android:text="Publisher"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="15sp" />
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimaryDark">
+                </View>
 
                 <!--text view for displaying number of pages of book-->
                 <TextView
@@ -50,6 +59,14 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp" />
 
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimaryDark">
+                </View>
+
                 <!--text view for displaying book publish date-->
                 <TextView
                     android:id="@+id/TVPublishDate"
@@ -60,6 +77,14 @@
                     android:text="Publish Date"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp" />
+
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimaryDark">
+                </View>
 
                 <TextView
                     android:id="@+id/TVRating"
@@ -72,6 +97,14 @@
                     android:textSize="15sp"
                     />
 
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimaryDark">
+                </View>
+
                 <TextView
                     android:id="@+id/TVAverageRating"
                     android:layout_width="match_parent"
@@ -83,6 +116,13 @@
                     android:textSize="15sp"
                     />
 
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimaryDark">
+                </View>
 
 
             </LinearLayout>
@@ -91,14 +131,21 @@
 
 
         <TextView
-            android:id="@+id/TVTitle"
+            android:id="@+id/TVPublisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:padding="4dp"
-            android:text="title"
+            android:text="publisher"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorPrimaryDark">
+        </View>
 
 
         <TextView
@@ -111,6 +158,13 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp" />
 
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorPrimaryDark">
+        </View>
 
         <TextView
             android:id="@+id/TVDescription"
@@ -120,7 +174,8 @@
             android:padding="4dp"
             android:text="Description"
             android:textColor="@color/colorPrimary"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

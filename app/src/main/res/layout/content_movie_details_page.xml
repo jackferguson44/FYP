@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -67,6 +68,14 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
 
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimaryDark">
+            </View>
+
 
             <TextView
                 android:id="@+id/movieRelease"
@@ -78,6 +87,14 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
 
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimaryDark">
+            </View>
+
             <TextView
                 android:id="@+id/runTime"
                 android:layout_width="match_parent"
@@ -87,6 +104,14 @@
                 android:text="Run Time: "
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimaryDark">
+            </View>
 
             <TextView
                 android:id="@+id/movieRating"
@@ -99,6 +124,14 @@
                 android:textSize="15sp"
                 />
 
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimaryDark">
+            </View>
+
             <TextView
                 android:id="@+id/movieAverageRating"
                 android:layout_width="match_parent"
@@ -109,6 +142,14 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
                 />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimaryDark">
+            </View>
 
 
 
@@ -166,8 +207,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonAddShowToList" />
 
-
-
+            <ImageView
+                android:layout_width="79dp"
+                android:layout_height="68dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintStart_toEndOf="@+id/showRatingBar"
+                app:layout_constraintTop_toBottomOf="@+id/buttonAddShowToList"
+                app:srcCompat="@mipmap/ic_tmdb_foreground" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

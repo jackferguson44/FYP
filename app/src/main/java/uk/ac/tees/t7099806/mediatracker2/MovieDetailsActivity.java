@@ -682,6 +682,36 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             changeButton("watching list");
         }
 
+        listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
+        listQuery = listRef.orderByChild("image").equalTo(image);
+        ValueEventListener valueEventListener1 = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                getListId(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        listQuery.addListenerForSingleValueEvent(valueEventListener1);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                setMovieAvgRating(snapshot);
+                setListAvgRating(snapshot);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void changeButton(String list)
