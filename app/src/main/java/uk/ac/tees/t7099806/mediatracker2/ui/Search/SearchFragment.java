@@ -20,15 +20,14 @@ import uk.ac.tees.t7099806.mediatracker2.SearchMoviesActivity;
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
 
-    private SearchViewModel searchViewModel;
+
 
     private ImageView searchBooks, searchShows;
     private TextView searchBooksText, searchShowsText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        searchViewModel =
-                ViewModelProviders.of(this).get(SearchViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
 

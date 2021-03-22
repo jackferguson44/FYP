@@ -33,7 +33,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_rv_item, parent, false);
-        LayoutInflater inflater;
 
         System.out.println("adapter");
         return new MovieViewHolder(view);
@@ -53,23 +52,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         genreString = "";
         getGenre(genre);
         holder.genre.setText(genreString);
-
-//        if(movieInformation.getGenre() != "" || movieInformation.getGenre() == null)
-//        {
-//            System.out.println(movieInformation.getGenre());
-//            int genre = Integer.parseInt(movieInformation.getGenre());
-//            genreString = "";
-//            getGenre(genre);
-//            holder.genre.setText(genreString);
-//        }
-//        else
-//        {
-//            genreString = "null";
-//            holder.genre.setText(genreString);
-//        }
-
-
-        //https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg
 
 
         Picasso.get().load("https://image.tmdb.org/t/p/w500/" +movieInformation.getImage()).into(holder.image);

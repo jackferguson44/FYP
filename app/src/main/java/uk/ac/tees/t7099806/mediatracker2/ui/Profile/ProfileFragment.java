@@ -38,7 +38,7 @@ import uk.ac.tees.t7099806.mediatracker2.UserInformation;
 
 public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
-    private ProfileViewModel profileViewModel;
+
 
     private TextView user_name, user_join_date, booksReadText, booksScoreText, showsWatchedText, timeWatchedText, showsScoredText, averageScoreText, navUserName;
     private Button buttonEditProfile;
@@ -48,8 +48,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference ref;
     private String userId;
-    private ImageView image;
-    private StorageReference storageReference;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,14 +60,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         FirebaseUser user = auth.getCurrentUser();
         userId = user.getUid();
 
-        storageReference = FirebaseStorage.getInstance().getReference();
-//        StorageReference profileRef = storageReference.child("users/"+auth.getCurrentUser().getUid()+"/profile.jpg");
-//        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                Picasso.get().load(uri).into(image);
-//            }
-//        });
+
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -115,7 +107,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+
         // TODO: Use the ViewModel
     }
 
@@ -135,7 +127,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
 
     private void showData(DataSnapshot dataSnapshot)
     {
-       // user_name.setText("jack ferg");
+
         user_name.setText(dataSnapshot.child(userId).getValue(UserInformation.class).getUserName());
         user_join_date.setText("Date Joined: " + dataSnapshot.child(userId).getValue(UserInformation.class).getDate());
         booksReadText.setText(dataSnapshot.child(userId).child("booksRead").getValue().toString());

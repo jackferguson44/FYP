@@ -25,19 +25,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-
-
 public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookViewHolder> {
 
     private ArrayList<BookInfoFirebase> bookInfoFirebaseArrayList;
     private Context context;
-    private String listType;
 
-    public BookListAdapter(ArrayList<BookInfoFirebase> bookInfoFirebaseArrayList, Context context, String listType)
+
+    public BookListAdapter(ArrayList<BookInfoFirebase> bookInfoFirebaseArrayList, Context context)
     {
         this.bookInfoFirebaseArrayList = bookInfoFirebaseArrayList;
         this.context = context;
-        this.listType = listType;
     }
 
 
@@ -90,7 +87,6 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
     public class BookViewHolder extends  RecyclerView.ViewHolder{
         TextView nameTV, publisherTV, pageCountTV, dateTV;
         ImageView bookIV;
-        Button removeFromListTV;
 
         public BookViewHolder(View itemView) {
             super(itemView);
@@ -102,48 +98,8 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         }
 
 
-        private void removeFromList()
-        {
-            System.out.println(nameTV.toString());
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            final FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
-            final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();;
-
-            DatabaseReference checkRef = databaseReference.child("list").child(firebaseUser.getUid());
-            Query query = checkRef.child("read list").orderByChild("bookImage").equalTo(bookIV.toString());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot dataSnapshot : snapshot.getChildren())
-                    {
-                        dataSnapshot.getRef().removeValue();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-//            checkRef.orderByChild("bookImage").equalTo(bookIV.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    if(snapshot.exists())
-//                    {
-//                        //String a = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantoreadlist").child("MUGYpHdo-i8Qshn4LdJ").get
-//                        databaseReference.child("lists").child(firebaseUser.getUid()).child("plantoreadlist").child("MUGYpHdo-i8Qshn4LdJ").removeValue();
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
-
         }
 
     }
 
-}
+

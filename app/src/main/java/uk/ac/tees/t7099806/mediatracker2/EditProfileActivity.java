@@ -42,13 +42,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private boolean accountExists;
     private String joinDate;
 
-//    //private Date date;
-//    private int booksRead;
-//    private double bookScore;
-//    private int showsWatched;
-//    //private Time timeWatched;
-//    private double showScore;
-//    private double totalScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

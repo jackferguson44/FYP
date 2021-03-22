@@ -32,9 +32,7 @@ public class PlantToReadActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
 
-    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference rootRef;
     private DatabaseReference listsRef;
     private String userID;
@@ -60,7 +58,6 @@ public class PlantToReadActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
         rootRef = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
@@ -99,7 +96,7 @@ public class PlantToReadActivity extends AppCompatActivity {
         listsRef.addListenerForSingleValueEvent(valueEventListener);
 
 
-        adapter = new BookListAdapter(bookInfoFirebaseArrayList, PlantToReadActivity.this, "plantoreadlist");
+        adapter = new BookListAdapter(bookInfoFirebaseArrayList, PlantToReadActivity.this);
 
         linearLayoutManager = new LinearLayoutManager(PlantToReadActivity.this, RecyclerView.VERTICAL, false);
         recyclerView = (RecyclerView) findViewById(R.id.readListRec);

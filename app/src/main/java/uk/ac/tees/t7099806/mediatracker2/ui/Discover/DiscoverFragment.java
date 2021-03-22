@@ -21,15 +21,13 @@ import uk.ac.tees.t7099806.mediatracker2.R;
 
 public class DiscoverFragment extends Fragment implements View.OnClickListener {
 
-    private DiscoverViewModel discoverViewModel;
 
     private ImageView discoverBooks, discoverShows;
     private TextView discoverBooksText, discoverShowsText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        discoverViewModel =
-                ViewModelProviders.of(this).get(DiscoverViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_discover, container, false);
 
 

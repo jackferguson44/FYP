@@ -50,14 +50,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonSignIn.setOnClickListener(this);
         buttonRegister.setOnClickListener(this);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     @Override
@@ -82,16 +74,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (TextUtils.isEmpty(email))
         {
-            // empty email
             Toast.makeText(this, "Please enter an email address", Toast.LENGTH_SHORT).show();
-            // stop
             return;
         }
         if (TextUtils.isEmpty(password))
         {
-            //empty password
             Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show();
-            // stop
             return;
         }
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -104,7 +92,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         });
-        //Toast.makeText(this, "Incorrect details entered", Toast.LENGTH_SHORT).show();
     }
 
     @Override

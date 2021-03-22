@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Search Movies"
+            android:text="Search Shows/Movies"
             android:textColor="@color/colorPrimary"
             android:textSize="32sp"
             android:layout_gravity="center"

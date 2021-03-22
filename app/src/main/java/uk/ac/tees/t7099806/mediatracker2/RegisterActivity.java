@@ -32,10 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button buttonSignIn;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference databaseReference;
-    private String userId;
+
 
 
     @Override
@@ -59,14 +56,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         buttonRegister.setOnClickListener(this);
         buttonSignIn.setOnClickListener(this);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
 
@@ -110,7 +99,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if(task.isSuccessful())
                 {
                     finish();
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                    // user.sendEmailVerification();
                     startActivity(new Intent(RegisterActivity.this, EditProfileActivity.class));
                 }
@@ -122,7 +110,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
 
         });
-
-        //startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
     }
 }

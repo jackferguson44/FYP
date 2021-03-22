@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:text="Popular Shows/Movies"
                 android:gravity="center"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorPrimary"
                 />
 
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="Genre"
                 android:gravity="center"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorPrimary"
                 />
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:text="Genre"
                 android:gravity="center"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorPrimary"/>
 
             <androidx.recyclerview.widget.RecyclerView

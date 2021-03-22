@@ -31,7 +31,6 @@ public class SearchBooksActivity extends AppCompatActivity{
     private ArrayList<BookInformation> bookInfoArrayList;
     private EditText searchEdt;
     private Button searchBtn;
-    private String urlGet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +66,6 @@ public class SearchBooksActivity extends AppCompatActivity{
         requestQueue.getCache().clear();
 
         final String urlI = "https://www.googleapis.com/books/v1/volumes?q=" + query;
-        urlGet = "https://www.googleapis.com/books/v1/volumes?q=" + query ;
 
         RequestQueue queue = Volley.newRequestQueue(SearchBooksActivity.this);
 

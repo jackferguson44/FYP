@@ -32,9 +32,9 @@ import java.util.List;
 public class SearchMoviesActivity extends AppCompatActivity {
 
 
-    private static String JSON_URL =  "https://api.themoviedb.org/3/search/multi?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query="; //"https://api.themoviedb.org/3/movie/popular?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269";
+    private static String JSON_URL =  "https://api.themoviedb.org/3/search/multi?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&query=";
 
-    private RequestQueue requestQueue;
+
     private ArrayList<MovieInformation> moviesInfoArrayList;
     private EditText searchEdt;
     private Button searchBtn;

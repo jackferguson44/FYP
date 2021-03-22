@@ -36,9 +36,9 @@ import java.text.DecimalFormat;
 
 public class MovieDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
-    private String title, genre, release, runTime, yourRating, avgRating, description, backDrop, overview, language, image;
+    private String title, genre, release, backDrop, overview, language, image;
 
-    private TextView titleTV, genreTV, releaseTV, runTimeTV, yourRatingTV, avgRatingTV, descriptionTV, overviewTV;
+    private TextView titleTV, genreTV, releaseTV, runTimeTV, yourRatingTV, avgRatingTV, overviewTV;
     private ImageView backDropIV;
 
     private DatabaseReference databaseReference;
@@ -81,7 +81,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     private boolean listExist;
     private String avgListRatingSet;
     private float listS;
-    private boolean ratingMethods;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         runTimeTV = findViewById(R.id.runTime);
         yourRatingTV = findViewById(R.id.movieRating);
         avgRatingTV = findViewById(R.id.movieAverageRating);
-        descriptionTV = findViewById(R.id.movieDescription);
         overviewTV = findViewById(R.id.movieDescription);
         backDropIV = findViewById(R.id.movieImage);
 
@@ -392,23 +391,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
         });
-
-
-
-
-
-        //checkrRefI.orderByChild("gen")
-
-
     }
 
     private void removeFromList()
     {
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
-
-
-
 
         checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -421,7 +409,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 }
                 if(snapshot.exists())
                 {
-                    ratingMethods = false;
+
                     setButtonToAdd();
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parentI).removeValue();
                     if(spinValue == "watched list")
@@ -452,8 +440,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         final int numStars = (int) ratingBar.getRating();
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
-
-
 
 
         final String[] key = new String[1];
@@ -549,7 +535,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     private void addMovieRating()
     {
-        final String numStarsS = String.valueOf(ratingBar.getRating());
         final int numStars = (int) ratingBar.getRating();
 
         final DatabaseReference checkRef = databaseReference.child("shows");
@@ -593,9 +578,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    //   databaseReference.child("books").child(parent[0]).child("Rating").setValue(numStarsS);
-
-
                     int movieScoreCount = Integer.parseInt(movieRatingCount);
                     float movieRating = Float.parseFloat(movieRatingAvg);
                     movieRating = movieRating * movieScoreCount;
@@ -618,9 +600,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                     String avgRatingSet = decimalFormat.format(movieRating);
 
                     avgRatingTV.setText("Average Rating: " + avgRatingSet);
-
-
-
                 }
             }
 
@@ -649,19 +628,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     private void toastMaker(String checkC)
     {
-        if(checkC == "exists")
-        {
-            //  Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
-        }
-        else if(checkC == "not exist to add")
+        if(checkC == "not exist to add")
         {
             Toast.makeText(this, "Added to list", Toast.LENGTH_SHORT).show();
         }
-        else
-        {
-            //Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
-        }
-
     }
 
     @Override

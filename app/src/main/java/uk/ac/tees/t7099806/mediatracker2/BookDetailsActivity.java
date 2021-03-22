@@ -47,7 +47,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private String userId;
+
 
 
     //used to get parent of users book in list in firebase
@@ -58,7 +58,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private String title, subtitle, publisher, publishedDate, description, thumbnail, category;
     private int pageCount;
-    private ArrayList<String> authors;
 
     private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV, ratingTV, avgRatingTV;
     private ImageView bookIV;
@@ -76,7 +75,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private boolean buttonAdd;
 
-    private int i;
 
     private String bookRatingAvg, bookRatingCount;
 
@@ -119,11 +117,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         spinValue ="plantoreadlist";
 
-//        buttonAddToList = findViewById(R.id.buttonAddToList);
-//        buttonAddToList.setOnClickListener(this);
-
-
-
 
         spinner = (Spinner) findViewById(R.id.spinnerAddToList);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(BookDetailsActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.spinner_list));
@@ -131,7 +124,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         spinner.setAdapter(myAdapter);
         spinner.setOnItemSelectedListener(this);
 
-//        checkImageBool = false;
 
         title = getIntent().getStringExtra("title");
         subtitle = getIntent().getStringExtra("subtitle");
@@ -154,12 +146,12 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = firebaseAuth.getCurrentUser();
-        userId = firebaseUser.getUid();
+
 
 
         parent = new String[999];
         bookParent = new String[1];
-        //i = 0;
+
 
         ratingBar = findViewById(R.id.bookRatingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -449,12 +441,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     private void removeFromList()
     {
 
-        String pages = String.valueOf(pageCount);
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
-
-
-
-
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -502,6 +489,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         String pages = String.valueOf(pageCount);
         final BookInfoFirebase bookInfoFirebase = new BookInfoFirebase(publisher, pages, publishedDate, title, subtitle, description, thumbnail);
         final BookInfoData bookInfoData = new BookInfoData(publisher, pages, publishedDate, title, subtitle, description, thumbnail, "0", "0");
+
+
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
@@ -562,7 +551,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     {
                         genreAdd();
                     }
-                   // genreAdd();
                 }
             }
 
@@ -633,16 +621,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             });
         }
 
-
-
-
-
-//    private boolean checkBookExists(String bookI)
-//    {
-//
-//    }
-
-
     private void showData(DataSnapshot dataSnapshot)
     {
         increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
@@ -656,19 +634,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void toastMaker(String checkC)
     {
-        if(checkC == "exists")
-        {
-          //  Toast.makeText(this, "already exists in list", Toast.LENGTH_SHORT).show();
-        }
-        else if(checkC == "not exist to add")
+        if(checkC == "not exist to add")
         {
             Toast.makeText(this, "Added to list", Toast.LENGTH_SHORT).show();
         }
-        else
-        {
-            //Toast.makeText(this, "This book has already been removed", Toast.LENGTH_LONG).show();
-        }
-
     }
 
 
@@ -679,9 +648,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
-        final String parentAdd;
-
-
 
         final String[] key = new String[1];
         Query query = checkRef.orderByChild("bookImage").equalTo(thumbnail);
@@ -691,30 +657,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     key[0] = ds.getKey();
 
-                    final DatabaseReference checkRatingExists;
-                    checkRatingExists = checkRef.child(key[0]);
-
-                    checkRatingExists.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for(DataSnapshot data: snapshot.getChildren())
-                            {
-                                if(data.child("Rating").exists())
-                                {
-
-                                }
-                                else
-                                {
-
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
                 }
             }
 
@@ -724,11 +666,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         };
         query.addListenerForSingleValueEvent(valueEventListener);
-
-
-
-
-
 
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -765,7 +702,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
                     addBookRating();
 
-
                 }
             }
 
@@ -775,7 +711,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        i = 0;
+
     }
 
 
@@ -785,7 +721,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private void addBookRating()
     {
-        final String numStarsS = String.valueOf(ratingBar.getRating());
+
         final int numStars = (int) ratingBar.getRating();
 
         final DatabaseReference checkRef = databaseReference.child("books");
@@ -829,8 +765,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                 //   databaseReference.child("books").child(parent[0]).child("Rating").setValue(numStarsS);
-
 
                     int bookScoreCount = Integer.parseInt(bookRatingCount);
                     float bookRating = Float.parseFloat(bookRatingAvg);
@@ -866,15 +800,4 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
     }
-
-    private void showDataBook(DataSnapshot dataSnapshot, String bookA, String bookT)
-    {
-        bookA = databaseReference.child("books").child(bookParent[0]).child("rating").toString();
-        bookT = databaseReference.child("books").child(bookParent[0]).child("ratingCount").toString();
-    }
-
-
-
-
-
 }

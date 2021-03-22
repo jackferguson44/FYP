@@ -46,16 +46,12 @@ public class DiscoverShowsActivity extends AppCompatActivity {
     private static String GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
     private static String GENRE_URL_2 = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
 
-    private RequestQueue requestQueue;
     private ArrayList<MovieInformation> moviesInfoArrayList;
-    private EditText searchEdt;
-    private Button searchBtn;
     RecyclerView recyclerView;
 
 
     private ArrayList<MovieInformation> movieGenreArrayList, movieGenreArrayList2;
     RecyclerView genreRecyclerView, genreRecyclerView2;
-
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -66,7 +62,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
     private int genreSearch;
 
     private TextView genreTitle, genreTitle2;
-    private String adder;
+
 
     private int i;
     @Override

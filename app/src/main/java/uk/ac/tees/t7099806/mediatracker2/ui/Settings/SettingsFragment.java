@@ -22,11 +22,7 @@ import uk.ac.tees.t7099806.mediatracker2.R;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
 
-    private SettingsViewModel mViewModel;
 
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
-    }
 
     private FirebaseAuth firebaseAuth;
     private Button buttonLogOut;
@@ -46,7 +42,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         // TODO: Use the ViewModel
     }
 

@@ -41,9 +41,6 @@ public class DiscoverBooksActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
     private ArrayList<BookInformation> bookInfoArrayList, bookInfoArrayList2, bookInfoArrayList3;
-    private EditText searchEdt;
-    private Button searchBtn;
-    private String urlGet;
     private TextView discoverText, discoverText2, discoverText3;
     RecyclerView mRecyclerView, mRecyclerView2, mRecyclerView3;
 
@@ -52,8 +49,6 @@ public class DiscoverBooksActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference checkGenre;
     private String genre, genre2, genre3;
-    private int genreSearch;
-    private String genreEdit;
     int i;
 
     @Override
@@ -94,7 +89,7 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         System.out.println("key " + genre);
 
                         genre.replaceAll(" ", "+");
-                        discoverText.setText("Discover: " + genre);
+                        discoverText.setText("Genre: " + genre);
 
 
                         getBookInfo(mRecyclerView, genre, bookInfoArrayList);
@@ -105,7 +100,7 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         System.out.println("key2  " + genre2);
 
                         genre2.replaceAll(" ", "+");
-                        discoverText2.setText("Discover: " + genre2);
+                        discoverText2.setText("Genre: " + genre2);
 
                         getBookInfo(mRecyclerView2, genre2, bookInfoArrayList2);
                     }
@@ -115,7 +110,7 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         System.out.println("key2  " + genre2);
 
                         genre3.replaceAll(" ", "+");
-                        discoverText3.setText("Discover: " + genre3);
+                        discoverText3.setText("Genre: " + genre3);
 
                         getBookInfo(mRecyclerView3, genre3, bookInfoArrayList3);
                     }
@@ -134,9 +129,6 @@ public class DiscoverBooksActivity extends AppCompatActivity {
         });
 
 
-
-
-       // getBookInfo();
     }
 
     private void getBookInfo(final RecyclerView recView, String genreI, final ArrayList<BookInformation> bookInformations)
@@ -151,7 +143,6 @@ public class DiscoverBooksActivity extends AppCompatActivity {
 
 
         final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:" + genreI;
-       // urlGet = "https://www.googleapis.com/books/v1/volumes?q=subject:Graphic+Novel" + genreI;
 
         RequestQueue queue = Volley.newRequestQueue(DiscoverBooksActivity.this);
 
@@ -174,26 +165,12 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
                         String thumbnail = imageLinks.optString("thumbnail");
                         String previewLink = volumeObj.optString("previewLink");
-                        JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
-                        String buyLink = saleInfoObj.optString("buyLink");
-                        //  JSONArray categoryArray = volumeObj.getJSONArray("categories");
                         ArrayList<String> authorsArrayList = new ArrayList<>();
                         if (authorsArray.length() != 0) {
                             for (int j = 0; j < authorsArray.length(); j++) {
                                 authorsArrayList.add(authorsArray.optString(i));
                             }
                         }
-//                        ArrayList<String> categoryArrayList = new ArrayList<>();
-//                        if(categoryArray.length() != 0)
-//                        {
-//                            for(int j = 0; j < categoryArray.length(); j++)
-//                            {
-//                                categoryArrayList.add(categoryArray.optString(i));
-//                            }
-//                        }
-//                        String category = categoryArrayList.get(0);
-//                        System.out.println("category:  " + category);
-
 
                         AddS addS = new AddS(thumbnail);
                         String thumbnailS = addS.add();

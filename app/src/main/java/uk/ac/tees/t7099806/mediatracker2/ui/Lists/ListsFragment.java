@@ -24,14 +24,14 @@ import uk.ac.tees.t7099806.mediatracker2.WatchingListActivity;
 
 public class ListsFragment extends Fragment implements View.OnClickListener {
 
-    private ListsViewModel listsViewModel;
+
 
     Button readButton, readingButton, planToReadButton, plantToWatchButton, watchingButton, watchedButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        listsViewModel = ViewModelProviders.of(this).get(ListsViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_lists, container, false);
 
         readButton = root.findViewById(R.id.readButton);
