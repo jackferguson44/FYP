@@ -1,5 +1,7 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
+
+//Used to get/set information of book information in user list stored in firebase
 public class BookInfoFirebase {
 
     private String publisher;

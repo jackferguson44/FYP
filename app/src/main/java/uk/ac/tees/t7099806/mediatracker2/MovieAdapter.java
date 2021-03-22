@@ -41,6 +41,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
+        //sets data to each show item
         final MovieInformation movieInformation = movieInformationList.get(position);
         System.out.println(movieInformation.getName());
         holder.name.setText(movieInformation.getName());
@@ -48,14 +49,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.language.setText("Language: " + movieInformation.getLanguage());
 
 
+        //gets genre of show
         int genre = Integer.parseInt(movieInformation.getGenre());
         genreString = "";
         getGenre(genre);
         holder.genre.setText(genreString);
 
-
+        //sets image
         Picasso.get().load("https://image.tmdb.org/t/p/w500/" +movieInformation.getImage()).into(holder.image);
 
+        //when show item is clicked on passes details to show details page
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +79,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     }
 
-
+    //Sets genre based on number recieved
     public void getGenre(int g)
     {
         switch (g) {

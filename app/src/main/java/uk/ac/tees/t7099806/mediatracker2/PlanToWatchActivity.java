@@ -23,6 +23,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+
+
 public class PlanToWatchActivity extends AppCompatActivity {
 
 
@@ -61,6 +63,7 @@ public class PlanToWatchActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
         listsRef = rootRef.child("lists").child(userID).child("plantowatchlist");
+
 
 
 

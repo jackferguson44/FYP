@@ -41,6 +41,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public void onBindViewHolder(@NonNull MovieListAdapter.MovieViewHolder holder, int position) {
+
+        //sets data to each show item
         final MovieInformation movieInformation = movieInformationArrayList.get(position);
         holder.name.setText(movieInformation.getName());
         holder.release.setText("Release Date: " + movieInformation.getReleaseDate());
@@ -48,9 +50,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.genre.setText(movieInformation.getGenre());
 
 
-
+        //sets image
         Picasso.get().load("https://image.tmdb.org/t/p/w500/" +movieInformation.getImage()).into(holder.image);
 
+        //when show item is clicked on passes details to show details page
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

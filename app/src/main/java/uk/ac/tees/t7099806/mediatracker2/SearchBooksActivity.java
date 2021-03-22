@@ -53,6 +53,7 @@ public class SearchBooksActivity extends AppCompatActivity{
         });
     }
 
+    //gets information of the book
     private void getBooksInfo(String query) {
 
         query.replaceAll(" ", "+");
@@ -98,8 +99,6 @@ public class SearchBooksActivity extends AppCompatActivity{
                             thumbnail = "https://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api";
                         }
                         String previewLink = volumeObj.optString("previewLink");
-                        //JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
-                        //String buyLink = saleInfoObj.optString("buyLink");
                         if(volumeObj.has("categories"))
                         {
                             JSONArray categoryArray = volumeObj.getJSONArray("categories");
@@ -123,6 +122,7 @@ public class SearchBooksActivity extends AppCompatActivity{
 
 
 
+                        //adds book info
                         AddS addS = new AddS(thumbnail);
                         String thumbnailS = addS.add();
                         BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnailS, previewLink, category[0]);

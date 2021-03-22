@@ -46,10 +46,9 @@ public class DiscoverShowsActivity extends AppCompatActivity {
     private static String GENRE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
     private static String GENRE_URL_2 = "https://api.themoviedb.org/3/discover/movie?api_key=e2fb14eac3f8a8dc0f6b924ca1a8c269&with_genres=";
 
+    ////Used to add shows' informations
     private ArrayList<MovieInformation> moviesInfoArrayList;
     RecyclerView recyclerView;
-
-
     private ArrayList<MovieInformation> movieGenreArrayList, movieGenreArrayList2;
     RecyclerView genreRecyclerView, genreRecyclerView2;
 
@@ -87,11 +86,13 @@ public class DiscoverShowsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot : snapshot.getChildren())
                 {
+                    //shows popular shows/movies
                     moviesInfoArrayList = new ArrayList<>();
                     recyclerView = findViewById(R.id.popularMovieList);
                     GetPopularMovieData getPopularMovieData = new GetPopularMovieData(JSON_URL, recyclerView, moviesInfoArrayList);
                     getPopularMovieData.execute();
 
+                    //shows second popular genre user has in lists
                     if(i == 1)
                     {
                         genre = childSnapshot.getKey();
@@ -103,6 +104,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
                         GetPopularMovieData getPopularMovieData1 = new GetPopularMovieData(GENRE_URL, genreRecyclerView, movieGenreArrayList);
                         getPopularMovieData1.execute();
                     }
+                    //shows most popular genre user has in lists
                     if(i == 0)
                     {
                         genreTwo = childSnapshot.getKey();
@@ -135,7 +137,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
 
         }
 
-
+        //sets genre based on number
         private void setGenre()
         {
             switch(genre)
@@ -201,7 +203,7 @@ public class DiscoverShowsActivity extends AppCompatActivity {
             System.out.println("Genre url: " + GENRE_URL);
 
         }
-
+    //sets genre of second most popular based on number
     private void setGenre2()
     {
         switch(genreTwo)
@@ -267,6 +269,8 @@ public class DiscoverShowsActivity extends AppCompatActivity {
         System.out.println("Genre url: " + GENRE_URL_2);
     }
 
+
+    //Gets information on each show
     public class GetPopularMovieData extends AsyncTask<String, String, String>
     {
         String searchURL;

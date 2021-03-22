@@ -484,7 +484,6 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 if(snapshot.exists())
                 {
                     setButtonToAdd();
-                    System.out.println("parent = " + parentI);
                     databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue).child(parentI).removeValue();
                     if(spinValue == "read list")
                     {

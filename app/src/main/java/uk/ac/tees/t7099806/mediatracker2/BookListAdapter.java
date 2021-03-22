@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
+
 public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookViewHolder> {
 
     private ArrayList<BookInfoFirebase> bookInfoFirebaseArrayList;
@@ -47,17 +48,21 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
 
     @Override
     public void onBindViewHolder(@NonNull BookListAdapter.BookViewHolder holder, int position) {
+
+        //Sets data to each book item
         final BookInfoFirebase bookInfo = bookInfoFirebaseArrayList.get(position);
         holder.nameTV.setText(bookInfo.getTitle());
         holder.publisherTV.setText(bookInfo.getPublisher());
         holder.pageCountTV.setText("No of Pages : " + bookInfo.getNumberOfPages());
         holder.dateTV.setText(bookInfo.getPublishDate());
 
+        //Set Image
         Picasso.get().load(bookInfo.getBookImage()).into(holder.bookIV);
 
         String numPage = bookInfo.getNumberOfPages();
         final int numPageI = Integer.parseInt(numPage);
 
+        //when book item is clicked on passes details to book details page
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +78,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                 System.out.println(bookInfo.getTitle());
                 i.putExtra("thumbnail", bookInfo.getBookImage());
                 i.putExtra("previewLink", "lol");
+
                 context.startActivity(i);
             }
         });

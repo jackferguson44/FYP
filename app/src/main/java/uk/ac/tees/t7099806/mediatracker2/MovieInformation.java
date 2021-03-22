@@ -1,5 +1,6 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
+//Used to show information of show on screens
 public class MovieInformation {
 
 

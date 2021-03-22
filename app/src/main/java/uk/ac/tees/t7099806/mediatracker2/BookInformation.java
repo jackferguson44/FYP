@@ -2,6 +2,7 @@ package uk.ac.tees.t7099806.mediatracker2;
 
 import java.util.ArrayList;
 
+//Used to show information of book on screens
 public class BookInformation {
 
     private String title;

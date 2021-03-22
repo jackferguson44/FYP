@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 public class DiscoverBooksActivity extends AppCompatActivity {
 
+    //Used to add books' informations
     private RequestQueue requestQueue;
     private ArrayList<BookInformation> bookInfoArrayList, bookInfoArrayList2, bookInfoArrayList3;
     private TextView discoverText, discoverText2, discoverText3;
@@ -83,35 +84,28 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                 for(DataSnapshot childSnapshot : snapshot.getChildren())
                 {
 
+                    ////shows third popular genre user has in lists
                     if(i == 2)
                     {
                         genre = childSnapshot.getKey();
-                        System.out.println("key " + genre);
-
                         genre.replaceAll(" ", "+");
                         discoverText.setText("Genre: " + genre);
-
-
                         getBookInfo(mRecyclerView, genre, bookInfoArrayList);
                     }
+                    //shows second popular genre user has in lists
                     if(i == 1)
                     {
                         genre2 = childSnapshot.getKey();
-                        System.out.println("key2  " + genre2);
-
                         genre2.replaceAll(" ", "+");
                         discoverText2.setText("Genre: " + genre2);
-
                         getBookInfo(mRecyclerView2, genre2, bookInfoArrayList2);
                     }
+                    //shows most popular genre user has in lists
                     if(i == 0)
                     {
                         genre3 = childSnapshot.getKey();
-                        System.out.println("key2  " + genre2);
-
                         genre3.replaceAll(" ", "+");
                         discoverText3.setText("Genre: " + genre3);
-
                         getBookInfo(mRecyclerView3, genre3, bookInfoArrayList3);
                     }
 
@@ -131,16 +125,12 @@ public class DiscoverBooksActivity extends AppCompatActivity {
 
     }
 
+    //gets information of the book
     private void getBookInfo(final RecyclerView recView, String genreI, final ArrayList<BookInformation> bookInformations)
     {
 
-
-
         requestQueue = Volley.newRequestQueue(DiscoverBooksActivity.this);
-
-
         requestQueue.getCache().clear();
-
 
         final String urlI = "https://www.googleapis.com/books/v1/volumes?q=subject:" + genreI;
 
@@ -176,15 +166,11 @@ public class DiscoverBooksActivity extends AppCompatActivity {
                         String thumbnailS = addS.add();
                         BookInformation bookInfo = new BookInformation(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnailS, previewLink, "category");
 
-
                         bookInformations.add(bookInfo);
 
                         BookAdapter adapter = new BookAdapter(bookInformations, DiscoverBooksActivity.this);
 
-
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DiscoverBooksActivity.this, RecyclerView.HORIZONTAL, false);
-
-
 
                         recView.setLayoutManager(linearLayoutManager);
                         recView.setAdapter(adapter);

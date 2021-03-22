@@ -364,7 +364,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 if(snapshot.child("genres").exists())
                 {
                     checker[0] = true;
-                    System.out.println("should be first");
                 }
                 else
                 {
@@ -373,17 +372,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 }
 
                 if(checker[0] == true) {
-                    System.out.println("should be second");
                     checkrRefI.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.child(genre).exists()) {
-
-                                System.out.println(genre);
                                 String genreS = snapshot.child(genre).child("value").getValue().toString();
                                 int genreInt = Integer.parseInt(genreS);
                                 genreInt++;
-                                System.out.println("genreint " + genreInt);
                                 checkRef.child("genres").child(genre).child("value").setValue(genreInt);
                             }
                             else
