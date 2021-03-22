@@ -1,5 +1,7 @@
 package uk.ac.tees.t7099806.mediatracker2;
 
+
+//Class is used to add S to google books image link, as http doesn't show image in application
 public class AddS {
 
     public String original;

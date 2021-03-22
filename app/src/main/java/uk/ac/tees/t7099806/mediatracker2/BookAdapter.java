@@ -38,14 +38,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
 
+        //Sets data to each book item
         final BookInformation bookInfo = bookInfoArrayList.get(position);
         holder.nameTV.setText(bookInfo.getTitle());
         holder.publisherTV.setText(bookInfo.getPublisher());
         holder.pageCountTV.setText("No of Pages : " + bookInfo.getPageCount());
         holder.dateTV.setText(bookInfo.getPublishedDate());
 
+
+        //Set Image
         Picasso.get().load(bookInfo.getThumbnail()).into(holder.bookIV);
 
+        //when book item is clicked on passes details to book details page
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

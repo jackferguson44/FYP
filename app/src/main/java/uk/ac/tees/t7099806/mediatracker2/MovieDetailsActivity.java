@@ -36,8 +36,10 @@ import java.text.DecimalFormat;
 
 public class MovieDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,  View.OnClickListener {
 
+    //Gets information that is passed from MovieAdapter class
     private String title, genre, release, backDrop, overview, language, image;
 
+    //Information to be displayed on screen
     private TextView titleTV, genreTV, releaseTV, runTimeTV, yourRatingTV, avgRatingTV, overviewTV;
     private ImageView backDropIV;
 
@@ -47,38 +49,48 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
-    //used to get parent of users show/movie in list in firebase
-    private String[] parent;
-    //used to get parent of show/movie in list in firebase
-    private String[] movieParent;
-
-
     private Button buttonAddToList;
     private RatingBar ratingBar;
     private Spinner spinner;
     private String spinValue;
 
+    //Keeps track of numbers of shows watched to decrease on increase if show is added or removed from watched list
     private String increaseWatched;
+    //The users rating of the show
     private String changeMovieRating;
+    //The average rating of the show
     private String changeAverageRating;
+    //Amount of ratings users has done, used to work out the average rating the user has gave to shows
     private String increaseMovieScoreCount;
+    //Amount of ratings show has, used to work out the average rating all users has gave a show
     private String increaseAverageScoreCount;
+
+    //The shows average rating and count of ratings
     private String movieRatingAvg, movieRatingCount;
 
+    //If true the button adds show to lists, if false the button removes show from lists
     private boolean buttonAdd;
 
+    //Both used to get the show id
     private DatabaseReference movieRef;
     private String movieKey;
     private Query movieQuery;
     private boolean movieExists;
+
+    //Usd to format the ratings of the show
     private DecimalFormat decimalFormat;
     private String avgMovieRatingSet;
     private float movieS;
 
+    //used to get reference of type of list
     private DatabaseReference listRef;
+    //Parent key of the types of lists
     private String listKey;
+    //Used to get list id and set ratings
     private Query listQuery;
+    //checks the list exits so no crashes occur when setting ratings
     private boolean listExist;
+    //Both used to set ratings
     private String avgListRatingSet;
     private float listS;
 
@@ -126,8 +138,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
         decimalFormat =  new DecimalFormat("#.00");
 
+        //used to check what list user has checked on dropdown
         spinValue ="plantowatchlist";
 
+        //Used to create and make dropdown functional
         spinner = (Spinner) findViewById(R.id.spinnerAddShowToList);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MovieDetailsActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.spinner_list_2));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -138,9 +152,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-        parent = new String[999];
-        movieParent = new String[1];
 
+
+        //Used to make rating bar functional
         ratingBar = findViewById(R.id.showRatingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -149,7 +163,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-
+        //Used to get data of various things
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -163,7 +177,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-
+        //Used to set buttons functionality depending on whether show is in user's list or not
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantowatchlist");
         checkInList.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -185,6 +199,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
+        //Used to get parent id of the show
         movieRef = databaseReference.child("shows");
         movieQuery = movieRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -201,7 +216,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         };
         movieQuery.addListenerForSingleValueEvent(valueEventListener);
 
-
+        //used to get users list parent id
         listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
         listQuery = listRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
@@ -218,7 +233,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         };
         listQuery.addListenerForSingleValueEvent(valueEventListener1);
 
-
+        //Used to set average and user rating
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
@@ -251,10 +266,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onClick(View v) {
+
+        //Save to list if show not in list
         if (v == buttonAddToList && buttonAdd == true)
         {
             saveToList(spinValue);
         }
+        //Removes show from list if in list
         if(v == buttonAddToList && buttonAdd == false)
         {
             removeFromList();
@@ -262,6 +280,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     }
 
+    //Adds show to list
     private void saveToList(final String spin)
     {
 
@@ -272,7 +291,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
 
-        //check book already exists in database
+        //Check show already exists in database
         final boolean[] checker = new boolean[1];
         final DatabaseReference checkRefI = databaseReference.child("movies");
         checkRefI.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -294,7 +313,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             }
         });
 
-
+        //Checks show already exists in list
         checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -332,7 +351,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-
+    //Adds genre to users information, which is used on the discover page to give show suggestions based on most popular genres
     private void genreAdd()
     {
         final DatabaseReference checkRef = databaseReference.child("users").child(firebaseUser.getUid());
@@ -393,11 +412,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         });
     }
 
+    //Removes show from list
     private void removeFromList()
     {
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
+        //Used to check if show is in list
         checkRef.orderByChild("image").equalTo(image).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -407,6 +428,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
                 {
                     parentI = dataSnapshot.getKey();
                 }
+                //Removes show from list
                 if(snapshot.exists())
                 {
 
@@ -434,6 +456,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         });
     }
 
+    //Sets the users average and total score in firebase, which is shown on users profile page
     private void addRating()
     {
         final String numStarsS = String.valueOf(ratingBar.getRating());
@@ -533,6 +556,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     }
 
+    //Sets the show's average score and score count in firebase
     private void addMovieRating()
     {
         final int numStars = (int) ratingBar.getRating();
@@ -612,13 +636,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
 
 
-
+    //Make the buttons functionality adding show to list
     private void setButtonToAdd()
     {
         buttonAddToList.setText("Add to list");
         buttonAdd = true;
     }
 
+    //Make the buttons functionality removing show from list
     private void setButtonToRemove()
     {
         buttonAddToList.setText("Remove from list");
@@ -626,6 +651,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         buttonAdd = false;
     }
 
+    //Shows toast if show is added to list
     private void toastMaker(String checkC)
     {
         if(checkC == "not exist to add")
@@ -636,6 +662,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //calls changeButton to change button functionality if show is or isn't in chosen list
         if(parent.getItemAtPosition(position).equals("Plan To Watch"))
         {
             spinValue = "plantowatchlist";
@@ -652,6 +679,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
             changeButton("watching list");
         }
 
+        //gets the parent id of the users list
         listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
         listQuery = listRef.orderByChild("image").equalTo(image);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
@@ -684,6 +712,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
 
     }
 
+    //Checks if show is/isn't in chosen list, changes button functionality based on result
     private void changeButton(String list)
     {
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child(list);
@@ -714,6 +743,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
     }
 
 
+    //Gets the parent ID of the show
     private void getMovieId(DataSnapshot snapshot)
     {
         for(DataSnapshot ds : snapshot.getChildren())
@@ -732,6 +762,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
+    //Gets parent ID of the user list
     private void getListId(DataSnapshot snapshot)
     {
         for(DataSnapshot ds : snapshot.getChildren())
@@ -749,6 +780,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
+    //Sets the average rating of the show
     private void setMovieAvgRating(DataSnapshot snapshot)
     {
 
@@ -762,6 +794,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AdapterVi
         }
     }
 
+    //Sets the user rating of the show
     private void setListAvgRating(final DataSnapshot snapshot)
     {
         if(listExist == true)

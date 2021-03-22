@@ -50,47 +50,60 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-    //used to get parent of users book in list in firebase
-    private String[] parent;
-    //used to get parent of book in list in firebase
-    private String[] bookParent;
 
-
+    //Gets information that is passed from BookAdapter class
     private String title, subtitle, publisher, publishedDate, description, thumbnail, category;
     private int pageCount;
 
+    //Information to be displayed on screen
     private TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV, ratingTV, avgRatingTV;
     private ImageView bookIV;
+
+
     private Button buttonAddToList;
     private RatingBar ratingBar;
     private Spinner spinner;
     private String spinValue;
 
-
+    //Keeps track of numbers of books read to decrease on increase if book is added or removed from read list
     private String increaseRead;
+    //The users rating of the book
     private String changeBookRating;
+    //The average rating of the book
     private String changeAverageRating;
+    //Amount of ratings users has done, used to work out the average rating the user has gave to books
     private String increaseBookScoreCount;
+    //Amount of ratings book has, used to work out the average rating all users has gave a book
     private String increaseAverageScoreCount;
 
+    //If true the button adds book to lists, if false the button removes book from lists
     private boolean buttonAdd;
 
 
+    //The books average rating and count of ratings
     private String bookRatingAvg, bookRatingCount;
 
 
+    //Both used to get the book id
     private DatabaseReference bookRef;
     private String bookKey;
     private Query bookQuery;
     private boolean bookExists;
+
+    //Usd to format the ratings of the book
     private DecimalFormat decimalFormat;
     private String avgBookRatingSet;
     private float bookS;
 
+    //used to get reference of type of list
     private DatabaseReference listRef;
+    //Parent key of the types of lists
     private String listKey;
+    //Used to get list id and set ratings
     private Query listQuery;
+    //checks the list exits so no crashes occur when setting ratings
     private boolean listExist;
+    //Both used to set ratings
     private String avgListRatingSet;
     private float listS;
 
@@ -115,9 +128,10 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
         decimalFormat =  new DecimalFormat("#.00");
 
+        //used to check what list user has checked on dropdown
         spinValue ="plantoreadlist";
 
-
+        //Used to create and make dropdown functional
         spinner = (Spinner) findViewById(R.id.spinnerAddToList);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(BookDetailsActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.spinner_list));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -148,11 +162,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         firebaseUser = firebaseAuth.getCurrentUser();
 
 
-
-        parent = new String[999];
-        bookParent = new String[1];
-
-
+        //Used to make rating bar functional
         ratingBar = findViewById(R.id.bookRatingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -162,8 +172,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
-
-
+        //Used to get data of various things
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -177,7 +186,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
-
+        //Used to set buttons functionality depending on whether book is in user's list or not
         checkInList = databaseReference.child("lists").child(firebaseUser.getUid()).child("plantoreadlist");
         checkInList.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -200,6 +209,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
+        //Used to get parent id of the book
         bookRef = databaseReference.child("books");
         bookQuery = bookRef.orderByChild("bookImage").equalTo(thumbnail);
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -218,7 +228,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-
+        //used to get users list parent id
         listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
         listQuery = listRef.orderByChild("bookImage").equalTo(thumbnail);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
@@ -234,7 +244,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         };
         listQuery.addListenerForSingleValueEvent(valueEventListener1);
 
-
+        //Used to set average and user rating
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
@@ -253,6 +263,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    //Gets the parent ID of the book
     private void getBookId(DataSnapshot snapshot)
     {
         for(DataSnapshot ds : snapshot.getChildren())
@@ -273,6 +284,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    //Sets the average rating of the book
     private void setBookAvgRating(DataSnapshot snapshot)
     {
         if(bookExists == true)
@@ -284,6 +296,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
+    //Sets the user rating of the book
     private void setListAvgRating(final DataSnapshot snapshot)
     {
         if(listExist == true)
@@ -310,6 +323,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
+    //Gets parent ID of the user list
     private void getListId(DataSnapshot snapshot)
     {
         for(DataSnapshot ds : snapshot.getChildren())
@@ -327,20 +341,24 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
+    //Make the buttons functionality adding book to list
     private void setButtonToAdd()
     {
         buttonAddToList.setText("Add to list");
         buttonAdd = true;
     }
 
+    //Make the buttons functionality removing book from list
     private void setButtonToRemove()
     {
         buttonAddToList.setText("Remove Book");
         buttonAdd = false;
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //calls changeButton to change button functionality if book is or isn't in chosen list
         if(parent.getItemAtPosition(position).equals("Plan To Read"))
         {
            spinValue = "plantoreadlist";
@@ -356,6 +374,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             spinValue = "reading list";
             changeButton("reading list");
         }
+
+        //gets the parent id of the users list
         listRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
         listQuery = listRef.orderByChild("image").equalTo(thumbnail);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
@@ -370,6 +390,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
             }
         };
+
+
         listQuery.addListenerForSingleValueEvent(valueEventListener1);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -389,7 +411,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-
+    //Checks if book is/isn't in chosen list, changes button functionality based on result
     private void changeButton(String list)
     {
 
@@ -422,13 +444,16 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+
     @Override
     public void onClick(View v)
     {
+        //Save to list if book not in list
         if (v == buttonAddToList && buttonAdd == true)
         {
             saveToList(spinValue);
         }
+        //Removes book from list if in list
         if(v == buttonAddToList && buttonAdd == false)
         {
             removeFromList();
@@ -438,11 +463,13 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
+    //Removes book from list
     private void removeFromList()
     {
 
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spinValue);
 
+        //Used to check if book is in list
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -453,6 +480,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                     parentI = dataSnapshot.getKey();
                 }
 
+                //Removes book from list
                 if(snapshot.exists())
                 {
                     setButtonToAdd();
@@ -483,6 +511,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
+    //Adds book to list
     private void saveToList(final String spin)
     {
 
@@ -495,7 +524,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         final DatabaseReference checkRef = databaseReference.child("lists").child(firebaseUser.getUid()).child(spin);
 
 
-        //check book already exists in database
+        //Check book already exists in database
         final boolean[] checker = new boolean[1];
         final DatabaseReference checkRefI = databaseReference.child("books");
         checkRefI.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -518,6 +547,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
+        //Checks book already exists in list
         checkRef.orderByChild("bookImage").equalTo(thumbnail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -525,6 +555,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
                 {
                     toastMaker("exists");
                 }
+                //Saves book to list
                 else
                 {
                     setButtonToRemove();
@@ -563,6 +594,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    //Adds genre to users information, which is used on the discover page to give book suggestions based on most popular genres
     private void genreAdd()
     {
         final DatabaseReference checkRef = databaseReference.child("users").child(firebaseUser.getUid());
@@ -621,6 +653,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
             });
         }
 
+
     private void showData(DataSnapshot dataSnapshot)
     {
         increaseRead = dataSnapshot.child("users").child(firebaseUser.getUid()).child("booksRead").getValue().toString();
@@ -632,6 +665,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    //Shows toast if book is added to list
     private void toastMaker(String checkC)
     {
         if(checkC == "not exist to add")
@@ -641,6 +675,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
+    //Sets the users average and total score in firebase, which is shown on users profile page
     private void addRating()
     {
         final String numStarsS = String.valueOf(ratingBar.getRating());
@@ -715,10 +750,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-
-
-
-
+    //Sets the book's average score and score count in firebase
     private void addBookRating()
     {
 
