@@ -91,6 +91,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             // stop
             return;
         }
+//        if(isValid(password) == false)
+//        {
+//            Toast.makeText(this, "Password must be 8-20 characters, have 1 numeric character, one lowercase and one uppecase character" +
+//                    " and have one symbol ", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         //if validations pass
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -111,4 +117,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         });
     }
+
+
+//    private static boolean isValid(String password)
+//    {
+//        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
+//    }
 }

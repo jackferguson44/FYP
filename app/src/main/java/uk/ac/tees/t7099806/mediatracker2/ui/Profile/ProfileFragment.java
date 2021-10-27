@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
@@ -97,6 +98,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         averageScoreText = view.findViewById(R.id.averageScoreText);
 
 
+
         buttonEditProfile = view.findViewById(R.id.buttonEditProfile);
         buttonEditProfile.setOnClickListener(this);
 
@@ -136,7 +138,7 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         String bockScoreString = decimalFormat.format(bockScore);
         booksScoreText.setText(bockScoreString);
-
+        checkZero(bockScoreString, booksScoreText);
 
 
         showsWatchedText.setText(dataSnapshot.child(userId).child("showsWatched").getValue().toString());
@@ -144,13 +146,27 @@ public class ProfileFragment extends Fragment implements  View.OnClickListener{
         float showScore = Float.parseFloat(dataSnapshot.child(userId).child("showScore").getValue().toString());
         String showScoreString = decimalFormat.format(showScore);
         showsScoredText.setText(showScoreString);
+        checkZero(showScoreString, showsScoredText);
 
 
         float averageScore = Float.parseFloat(dataSnapshot.child(userId).child("totalScore").getValue().toString());
         String averageScoreString = decimalFormat.format(averageScore);
-        averageScoreText.setText(averageScoreString);
+        checkZero(averageScoreString, averageScoreText);
 
 
+    }
+
+
+    private void checkZero(String scoreT, TextView scoreTV)
+    {
+        if(scoreT.equals(".00"))
+        {
+            scoreTV.setText("0");
+        }
+        else
+        {
+            scoreTV.setText(scoreT);
+        }
     }
 
     @Override
