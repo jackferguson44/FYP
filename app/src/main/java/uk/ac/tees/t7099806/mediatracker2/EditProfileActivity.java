@@ -134,4 +134,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        user.delete();
+        startActivity(new Intent(this, RegisterActivity.class));
+        super.onBackPressed();
+    }
 }
