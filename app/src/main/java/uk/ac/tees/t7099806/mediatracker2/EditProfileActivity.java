@@ -43,6 +43,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private String joinDate;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonSave = findViewById(R.id.buttonSave);
+
 
         buttonSave.setOnClickListener(this);
 
@@ -91,6 +94,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void saveInformation()
     {
+
         String userName = editTextUsername.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
         String pattern = "dd-MM-yyyy";
@@ -100,11 +104,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         {
             UserInformation userInformation = new UserInformation(userName, phone, date);
             databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+            databaseReference.child("userNames").child(userName).setValue(userName);
         }
         else
         {
             UserInformation userInformation = new UserInformation(userName, phone, joinDate);
             databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+            databaseReference.child("userNames").child(userName).setValue(userName);
         }
         Toast.makeText(this, "Details Saved", Toast.LENGTH_SHORT).show();
     }
