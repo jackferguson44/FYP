@@ -39,9 +39,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private FirebaseUser user;
     private String userId;
 
-    private boolean accountExists;
+    private boolean accountExists, userNameExists;
     private String joinDate;
 
+    private String userNameI;
 
 
 
@@ -60,6 +61,20 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonSave = findViewById(R.id.buttonSave);
 
+        userNameI = editTextUsername.getText().toString().trim();
+
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+//            {
+//                showData(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
+
 
         buttonSave.setOnClickListener(this);
 
@@ -73,17 +88,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             }
         };
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                showData(dataSnapshot);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
 
 
 
@@ -100,7 +105,14 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         String pattern = "dd-MM-yyyy";
         String date = new SimpleDateFormat(pattern).format(new Date());
 
-        if(accountExists == false)
+
+        if(userNameExists == true)
+        {
+            Toast.makeText(this, "User name already exists", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(userNameExists == false)
         {
             UserInformation userInformation = new UserInformation(userName, phone, date);
             databaseReference.child("users").child(user.getUid()).setValue(userInformation);
@@ -113,33 +125,87 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             databaseReference.child("userNames").child(userName).setValue(userName);
         }
         Toast.makeText(this, "Details Saved", Toast.LENGTH_SHORT).show();
+
+        startActivity(new Intent(this, MainActivity.class));
     }
 
-
-    private void showData(DataSnapshot dataSnapshot)
-    {
-        if(dataSnapshot.child("users").child(userId).exists())
-        {
-            editTextUsername.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
-            editTextPhone.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getPhone());
-            joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
-            accountExists = true;
-        }
-        else
-        {
-            accountExists = false;
-        }
-    }
 
     @Override
     public void onClick(View v) {
         if(v == buttonSave)
         {
-            saveInformation();
-            startActivity(new Intent(this, MainActivity.class));
+            userNameI = editTextUsername.getText().toString().trim();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("userNames").child(userNameI).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists() ){
+                        userNameExists = true;
+                        System.out.println("usernameI = " + userNameI);
+                        System.out.println("true");
+                        System.out.println("datasnapshot == " + dataSnapshot.getValue().toString());
+                        saveInformation();
+                    } else {
+                        userNameExists = false;
+                        System.out.println("usernameI = " + userNameI);
+                        System.out.println("false");
+                        saveInformation();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
         }
 
     }
+
+
+    private void check()
+    {
+
+    }
+
+
+//    private void showData(DataSnapshot dataSnapshot)
+//    {
+//
+//
+//        if(dataSnapshot.child("users").child(userId).exists())
+//        {
+//            editTextUsername.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
+//            editTextPhone.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getPhone());
+//            joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
+//            accountExists = true;
+//        }
+//        else
+//        {
+//            accountExists = false;
+//        }
+//
+//
+//        if(dataSnapshot.child("userNames").child(userNameI).exists())
+//        {
+//            userNameExists = true;
+//            System.out.println("user name exists");
+//        }
+//        else
+//        {
+//            userNameExists = false;
+//            System.out.println("user name does not exists");
+//        }
+//    }
+
+
+
+
+
+
 
     @Override
     public void onBackPressed()
