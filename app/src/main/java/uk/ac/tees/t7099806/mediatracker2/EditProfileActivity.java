@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
-    public DatabaseReference databaseReference;
+    public DatabaseReference databaseReference, ref;
 
     private EditText editTextUsername, editTextPhone;
     private Button buttonSave;
@@ -39,10 +39,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private FirebaseUser user;
     private String userId;
 
+
+
     private boolean accountExists, userNameExists;
     private String joinDate;
-
-    private String userNameI;
+//
+//    private String userNameI;
+    private String userNameOriginal;
 
 
 
@@ -56,24 +59,26 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        ref = databaseReference.child("users");
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonSave = findViewById(R.id.buttonSave);
 
-        userNameI = editTextUsername.getText().toString().trim();
+        //userNameI = editTextUsername.getText().toString().trim();
 
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-//            {
-//                showData(dataSnapshot);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                showData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
 
 
         buttonSave.setOnClickListener(this);
@@ -103,27 +108,33 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         String userName = editTextUsername.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
         String pattern = "dd-MM-yyyy";
+        //date joined is wrong
         String date = new SimpleDateFormat(pattern).format(new Date());
 
 
         if(userNameExists == true)
         {
-            Toast.makeText(this, "User name already exists", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(userNameExists == false)
-        {
-            UserInformation userInformation = new UserInformation(userName, phone, date);
+            UserInformation userInformation = new UserInformation(userName, phone, joinDate);
             databaseReference.child("users").child(user.getUid()).setValue(userInformation);
-            databaseReference.child("userNames").child(userName).setValue(userName);
         }
         else
         {
-            UserInformation userInformation = new UserInformation(userName, phone, joinDate);
+            UserInformation userInformation = new UserInformation(userName, phone, date);
             databaseReference.child("users").child(user.getUid()).setValue(userInformation);
-            databaseReference.child("userNames").child(userName).setValue(userName);
         }
+
+//        if(userNameExists == false)
+//        {
+//            UserInformation userInformation = new UserInformation(userName, phone, date);
+//            databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+//            databaseReference.child("userNames").child(userName).setValue(userName);
+        //}
+//        else
+//        {
+//            UserInformation userInformation = new UserInformation(userName, phone, joinDate);
+//            databaseReference.child("users").child(user.getUid()).setValue(userInformation);
+          //  databaseReference.child("userNames").child(userName).setValue(userName);
+//        }
         Toast.makeText(this, "Details Saved", Toast.LENGTH_SHORT).show();
 
         startActivity(new Intent(this, MainActivity.class));
@@ -134,30 +145,47 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         if(v == buttonSave)
         {
-            userNameI = editTextUsername.getText().toString().trim();
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            ref.child("userNames").child(userNameI).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists() ){
-                        userNameExists = true;
-                        System.out.println("usernameI = " + userNameI);
-                        System.out.println("true");
-                        System.out.println("datasnapshot == " + dataSnapshot.getValue().toString());
-                        saveInformation();
-                    } else {
-                        userNameExists = false;
-                        System.out.println("usernameI = " + userNameI);
-                        System.out.println("false");
-                        saveInformation();
-                    }
-                }
+            saveInformation();
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+//            userNameI = editTextUsername.getText().toString().trim();
+//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//            ref.child("userNames").child(userNameI).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    System.out.println("userNameOriginal outside if = " + userNameOriginal);
+//
+//                    //if user name isn't changed no crash, crash if user name changed because of null object reference
+//
+//
+//                    if(dataSnapshot.getValue().toString().trim().equals(userNameOriginal))
+//                    {
+//                        System.out.println("userNameOriginal= " + userNameOriginal);
+//                       //System.out.println(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
+//                        userNameExists = false;
+//                        saveInformation();
+//                    }
+//                    else if(dataSnapshot.exists())
+//                    {
+//                        userNameExists = true;
+//                        System.out.println("usernameI = " + userNameI);
+//                        System.out.println("true");
+//                        //System.out.println("datasnapshot == " + dataSnapshot.getValue().toString());
+//                        saveInformation();
+//                    }
+//                    else
+//                    {
+//                        userNameExists = false;
+//                        System.out.println("usernameI = " + userNameI);
+//                        System.out.println("false");
+//                        saveInformation();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
 
 
@@ -172,21 +200,30 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-//    private void showData(DataSnapshot dataSnapshot)
-//    {
-//
-//
-//        if(dataSnapshot.child("users").child(userId).exists())
-//        {
-//            editTextUsername.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
-//            editTextPhone.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getPhone());
-//            joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
-//            accountExists = true;
-//        }
-//        else
-//        {
-//            accountExists = false;
-//        }
+    private void showData(DataSnapshot dataSnapshot)
+    {
+
+//        joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
+//        userNameOriginal = (dataSnapshot.child(userId).getValue(UserInformation.class).getUserName());
+
+
+        if(dataSnapshot.child("users").child(userId).exists())
+        {
+            editTextUsername.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getUserName());
+            editTextPhone.setText(dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getPhone());
+            joinDate = (dataSnapshot.child("users").child(userId).getValue(UserInformation.class).getDate());
+            editTextUsername.setText(userNameOriginal);
+            editTextPhone.setText(dataSnapshot.child(userId).getValue(UserInformation.class).getPhone());
+            userNameExists = true;
+            System.out.println("exists bruh");
+
+        }
+        else
+        {
+            System.out.println("does no exists bruh");
+            userNameExists = false;
+        }
+
 //
 //
 //        if(dataSnapshot.child("userNames").child(userNameI).exists())
@@ -199,7 +236,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 //            userNameExists = false;
 //            System.out.println("user name does not exists");
 //        }
-//    }
+    }
 
 
 
